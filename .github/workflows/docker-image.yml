@@ -22,3 +22,23 @@ jobs:
         docker build . -t ${{ secrets.REGISTRY }}:$GITHUB_RUN_NUMBER
         docker tag $(docker images ${{ secrets.REGISTRY }}:$GITHUB_RUN_NUMBER -q) ${{ secrets.REGISTRY }}:latest
         docker push ${{ secrets.REGISTRY }}:latest
+
+  deploy:
+    needs: [ build ]
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PWD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            docker stop $(docker ps --filter ancestor=${{ secrets.REGISTRY }} -q)
+            docker rm -f $(docker ps -a --filter ancestor=${{ secrets.REGISTRY }}:latest -q)
+            docker rmi -f $(docker images  ${{ secrets.REGISTRY }}:latest -q)
+            docker login --username=${{ secrets.USERNAME }} --password ${{ secrets.PASSWORD }} registry.cn-shanghai.aliyuncs.com
+            docker pull ${{ secrets.REGISTRY }}:latest
+            docker run -d -p ${{ secrets.EXPOSE_PORT }}:8080 ${{ secrets.REGISTRY }}:latest
