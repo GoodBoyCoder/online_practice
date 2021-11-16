@@ -22,7 +22,7 @@ jobs:
         
     - name: Push Aliyun Docker Repo
       run: |
-        docker login --username=${{ secrets.USERNAME }} --password ${{ secrets.PASSWORD }} ${{ secrets.REGISTRY }}
+        docker login --username=${{ secrets.USERNAME }} --password ${{ secrets.PASSWORD }} registry.cn-guangzhou.aliyuncs.com
         docker build . -t ${{ secrets.REGISTRY }}:$GITHUB_RUN_NUMBER
         docker push ${{ secrets.REGISTRY }}:$GITHUB_RUN_NUMBER
         docker tag $(docker images ${{ secrets.REGISTRY }}:$GITHUB_RUN_NUMBER -q) ${{ secrets.REGISTRY }}:latest
