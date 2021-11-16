@@ -1,5 +1,5 @@
 # First stage: complete build environment
-FROM maven:3.5.0-jdk-11-alpine AS builder
+FROM maven:3.5.0-jdk-8-alpine AS builder
 # 作者信息
 MAINTAINER GoodBoy "13682768293@163.com"
 
@@ -11,7 +11,7 @@ ADD ./src src/
 RUN mvn clean package
 
 # Second stage: minimal runtime environment
-FROM openjdk:11-jre-alpine
+FROM openjdk:8-jre-alpine
 
 # copy jar from the first stage
 COPY --from=builder target/online-practice-1.0-SNAPSHOT.jar online-practice.jar
