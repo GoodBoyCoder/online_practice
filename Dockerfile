@@ -22,4 +22,4 @@ ENV LANGUAGE en_US.UTF-8
 ENV LC_ALL   en_US.UTF-8
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
-ENTRYPOINT ["java", "-jar", "online-practice.jar"]
+ENTRYPOINT ["java", "-jar", "online-practice.jar", "--jasypt.encryptor.password=$JASYPT", "--spring.profiles.active=master"]

@@ -39,4 +39,4 @@ jobs:
             docker rmi -f $(docker images  ${{ secrets.REGISTRY }}:latest -q)
             docker login --username=${{ secrets.USERNAME }} --password ${{ secrets.PASSWORD }} registry.cn-shanghai.aliyuncs.com
             docker pull ${{ secrets.REGISTRY }}:latest
-            docker run -d -p ${{ secrets.EXPOSE_PORT }}:8080 ${{ secrets.REGISTRY }}:latest
+            docker run -d -p ${{ secrets.EXPOSE_PORT }}:8080 ${{ secrets.REGISTRY }}:latest -e JASYPT=${{ secrets.JASYPT_ENCRYPTOR }}

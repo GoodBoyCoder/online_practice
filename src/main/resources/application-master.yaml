@@ -1,0 +1,35 @@
+spring:
+  # 数据库
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: ENC(h4mqw7oqdi4SwY0Lr6hCDe4Xk1Wmlz64/I8vYY1WBlHsqOOZsVAdsrW86DZ4AejoqSFRByrFQe+Pf9TjmoqNxP/VJaY8Wu3ITXTn5bDyAu0XHqrEjCNDWmDR2FbkL48R6X3AGLsccnGpluJLAb96KDPyI5ocjdgNoemBtvVYic8=)
+      username: ENC(W4JTJHPmXAhxfVV6C9qhJlYYxHjlsBoI)
+      password: ENC(GEZC8359X1IwGDYw1c4acTOfRDOL7QenpNnXrNHKGI8=)
+      initial-size: 10
+      max-active: 60
+      min-idle: 5
+      filters: wall,mergeStat
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 5000
+      stat-view-servlet:
+        login-username: ENC(W4JTJHPmXAhxfVV6C9qhJlYYxHjlsBoI)
+        login-password: ENC(GEZC8359X1IwGDYw1c4acTOfRDOL7QenpNnXrNHKGI8=)
+        enabled: true
+        allow:
+        deny:
+      test-while-idle: true
+      test-on-borrow: true
+  main:
+    allow-bean-definition-overriding: true
+
+#mybatis plus
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  port: 8080
