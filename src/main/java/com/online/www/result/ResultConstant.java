@@ -11,5 +11,6 @@ public class ResultConstant {
 
     public static final int SUCCESS_CODE = 200;
     public static final int FAIL_CODE = 400;
+    public static final int UNAUTHORIZED_CODE = 401;
     public static final int FORBIDDEN_CODE = 403;
 }

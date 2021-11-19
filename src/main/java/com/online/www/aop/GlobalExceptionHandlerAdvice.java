@@ -7,7 +7,9 @@ import java.sql.SQLSyntaxErrorException;
 import java.util.List;
 import java.util.Optional;
 
+import com.online.www.exception.AuthException;
 import com.online.www.result.CommonResult;
+import com.online.www.result.ResultConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
@@ -84,6 +86,13 @@ public class GlobalExceptionHandlerAdvice {
     public CommonResult<Void> handleDuplicateKeyException(DuplicateKeyException ex) {
         log.error("DuplicateKeyException", ex);
         return CommonResult.operateFailWithMessage("数据重复，请检查后提交");
+    }
+
+    @ExceptionHandler(AuthException.class)
+    @ResponseBody
+    public CommonResult<Void> handleDuplicateKeyException(AuthException ex) {
+        log.error("AuthException", ex);
+        return new CommonResult<>(ResultConstant.UNAUTHORIZED_CODE, ex.getMessage(), false);
     }
 
     @ExceptionHandler(Exception.class)
