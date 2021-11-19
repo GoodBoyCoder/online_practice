@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author online
@@ -20,18 +20,17 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SubjectQuestion implements Serializable {
-
+public class UserQuestion implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
-     * 科目
+     * 用户ID
      */
-    @TableField("subject_id")
-    private Integer subjectId;
+    @TableField("user_id")
+    private Integer userId;
 
     /**
      * 题目ID
@@ -39,11 +38,34 @@ public class SubjectQuestion implements Serializable {
     @TableField("question_id")
     private Long questionId;
 
+    /**
+     * 做题情况
+     */
+    @TableField("answer")
+    private String answer;
+
+    /**
+     * 做题结果(分数) get/total
+     */
+    @TableField("result")
+    private String result;
+
+    /**
+     * 是否题目完全正确
+     */
+    @TableField("complete_true")
+    private Boolean completeTrue;
+
 
     public static final String ID = "id";
 
-    public static final String SUBJECT_ID = "subject_id";
+    public static final String USER_ID = "user_id";
 
     public static final String QUESTION_ID = "question_id";
 
+    public static final String ANSWER = "answer";
+
+    public static final String RESULT = "result";
+
+    public static final String COMPLETE_TRUE = "complete_true";
 }
