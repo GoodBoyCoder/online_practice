@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.online.www.mapper.ExamUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.online.www.pojo.po.ExamUser">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="exam_id" property="examId" />
+        <result column="make_id" property="makeId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, exam_id, make_id
+    </sql>
+
+</mapper>
