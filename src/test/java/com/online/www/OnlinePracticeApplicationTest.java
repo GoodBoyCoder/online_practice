@@ -2,6 +2,7 @@ package com.online.www;
 
 import javax.annotation.Resource;
 
+import com.online.www.util.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -12,5 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class OnlinePracticeApplicationTest {
     @Test
-    void contextLoads() {}
+    void contextLoads() {
+    }
 }
