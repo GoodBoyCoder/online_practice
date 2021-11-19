@@ -20,5 +20,5 @@ public class SecurityProperties {
     /**
      * token请求头
      */
-    private String tokenHeader = "token";
+    private String tokenHeader = "Authorization";
 }
