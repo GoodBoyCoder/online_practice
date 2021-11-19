@@ -14,12 +14,6 @@ spring:
         stat:
           log-slow-sql: true
           slow-sql-millis: 5000
-      stat-view-servlet:
-        login-username: ENC(W4JTJHPmXAhxfVV6C9qhJlYYxHjlsBoI)
-        login-password: ENC(GEZC8359X1IwGDYw1c4acTOfRDOL7QenpNnXrNHKGI8=)
-        enabled: true
-        allow:
-        deny:
       test-while-idle: true
       test-on-borrow: true
   main:
