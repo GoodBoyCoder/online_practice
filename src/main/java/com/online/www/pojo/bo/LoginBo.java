@@ -1,5 +1,7 @@
 package com.online.www.pojo.bo;
 
+import javax.validation.constraints.NotBlank;
+
 import lombok.Data;
 
 /**
@@ -8,6 +10,8 @@ import lombok.Data;
  */
 @Data
 public class LoginBo {
+    @NotBlank(message = "账号不能为空")
     private String userName;
+    @NotBlank(message = "密码不能为空")
     private String password;
 }
