@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-11-19
  */
 @RestController
-@RequestMapping("/online_practice/exam")
+@RequestMapping("/api/exam")
 public class ExamController {
 
 }
