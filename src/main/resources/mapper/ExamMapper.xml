@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.online.www.online_practice.mapper.ExamMapper">
+<mapper namespace="com.online.www.mapper.ExamMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.online.www.online_practice.pojo.po.Exam">
+    <resultMap id="BaseResultMap" type="com.online.www.pojo.po.Exam">
         <id column="id" property="id" />
         <result column="exam_name" property="examName" />
         <result column="start_time" property="startTime" />
