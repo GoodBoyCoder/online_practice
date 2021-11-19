@@ -1,7 +1,7 @@
 package com.online.www.result;
 
 /**
- * @author yongPhone
+ * @author TopView
  */
 public class ResultConstant {
 

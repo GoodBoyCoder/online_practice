@@ -6,6 +6,10 @@ import java.io.PrintWriter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * @author TopView
+ */
+
 public class ResultUtil {
 
     public static <T> void printCode(HttpServletResponse response, CommonResult<T> result, Integer statusCode) throws IOException {

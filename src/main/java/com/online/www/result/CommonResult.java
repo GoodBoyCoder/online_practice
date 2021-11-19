@@ -12,7 +12,7 @@ import static com.online.www.result.ResultConstant.OPERATE_SUCCESS_MESSAGE;
 import static com.online.www.result.ResultConstant.SUCCESS_CODE;
 
 /**
- * 公共返回信息
+ * @author TopView
  */
 @Data
 @Accessors(chain = true)
