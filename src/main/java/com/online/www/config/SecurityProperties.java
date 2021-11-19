@@ -16,4 +16,9 @@ public class SecurityProperties {
      * 鉴权过期时间（单位：毫秒）
      */
     private Long expire = 7200000L;
+
+    /**
+     * token请求头
+     */
+    private String tokenHeader = "token";
 }
