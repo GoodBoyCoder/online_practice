@@ -2,6 +2,7 @@ package com.online.www.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.online.www.pojo.bo.LoginBo;
+import com.online.www.pojo.bo.SignUpBo;
 import com.online.www.pojo.po.User;
 import com.online.www.pojo.vo.LoginVo;
 
@@ -20,4 +21,12 @@ public interface UserService extends IService<User> {
      * @return loginVO/token
      */
     LoginVo login(LoginBo loginBo);
+
+    /**
+     * 用户注册
+     *
+     * @param signUpBo 注册Bo
+     * @return loginVo/token
+     */
+    LoginVo signUp(SignUpBo signUpBo);
 }
