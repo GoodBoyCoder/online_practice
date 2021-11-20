@@ -12,11 +12,14 @@
         <result column="pic" property="pic" />
         <result column="mark" property="mark" />
         <result column="type" property="type" />
+        <result column="subject_id" property="subjectId" />
+        <result column="chapter" property="chapter" />
+        <result column="remark" property="remark" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, question, option, answer, explain, pic, mark, type
+        id, question, option, answer, explain, pic, mark, type, subject_id, chapter, remark
     </sql>
 
 </mapper>
