@@ -82,10 +82,10 @@ public class QuestionVo {
     public void convertFromQuestionWithNoAnswer(Question question) {
         this.id = question.getId();
         this.question = question.getQuestion();
-        this.type = question.getType();
+        this.type = question.getQuestionType();
         if (type.equals(QuestionTypeConstant.SINGLE) || type.equals(QuestionTypeConstant.MULTIPLE)) {
             //选择题
-            String option = question.getOption();
+            String option = question.getQuestionOptions();
             if (StringUtils.isEmpty(option)) {
                 throw new RuntimeException("获取题目异常，请稍后再试");
             }
@@ -101,7 +101,7 @@ public class QuestionVo {
     public void convertFromQuestion(Question question) {
         convertFromQuestionWithNoAnswer(question);
         this.answer = question.getAnswer();
-        this.explain = question.getExplain();
+        this.explain = question.getQuestionExplain();
     }
 
 }

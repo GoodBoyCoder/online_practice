@@ -30,11 +30,11 @@ public interface QuestionMapper extends BaseMapper<Question> {
     default List<Question> selectQuestions(QuestionSelectBo bo, List<Long> questionDoneList) {
         QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-                .select(Question::getId, Question::getQuestion, Question::getOption, Question::getPic,
-                        Question::getType, Question::getMark, Question::getChapter, Question::getSubjectId,
+                .select(Question::getId, Question::getQuestion, Question::getQuestionOptions, Question::getPic,
+                        Question::getQuestionType, Question::getMark, Question::getChapter, Question::getSubjectId,
                         Question::getRemark)
                 .eq(Objects.nonNull(bo.getSubjectId()), Question::getSubjectId, bo.getSubjectId())
-                .eq(Objects.nonNull(bo.getType()), Question::getType, bo.getType())
+                .eq(Objects.nonNull(bo.getType()), Question::getQuestionType, bo.getType())
                 .isNotNull(Objects.nonNull(bo.getNeedPic()) && bo.getNeedPic(), Question::getPic)
                 .like(Objects.nonNull(bo.getChapter()), Question::getChapter, bo.getChapter())
                 .notIn(!CollectionUtils.isEmpty(questionDoneList), Question::getId, questionDoneList);

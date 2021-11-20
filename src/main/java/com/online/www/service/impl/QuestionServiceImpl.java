@@ -43,6 +43,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         }
 
         //查询满足条件的随机题目
+        //TODO 待优化(SQL方式查询/缓存？)
         List<Question> questionList = baseMapper.selectQuestions(selectBo, questionDoneList);
         if (!CollectionUtils.isEmpty(questionList)) {
             Question question = questionList.get((int) (Math.random() * questionList.size()));
