@@ -10,19 +10,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @date 2021-11-20
  */
 @Configuration
-public class GlobalCorsConfig {
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowCredentials(true)
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
-                        .allowedHeaders("*")
-                        .exposedHeaders("*");
-            }
-        };
+public class GlobalCorsConfig implements WebMvcConfigurer {
+    @Override
+    public void addCorsMappings(CorsRegistry corsRegistry) {
+        corsRegistry.addMapping("/**")
+                .allowedOrigins("http://localhost:12008", "http://127.0.0.1:12008")
+                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD");
     }
 }
