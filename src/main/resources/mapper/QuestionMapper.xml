@@ -6,12 +6,12 @@
     <resultMap id="BaseResultMap" type="com.online.www.pojo.po.Question">
         <id column="id" property="id" />
         <result column="question" property="question" />
-        <result column="option" property="option" />
+        <result column="question_options" property="questionOptions" />
         <result column="answer" property="answer" />
-        <result column="explain" property="explain" />
+        <result column="question_explain" property="questionExplain" />
         <result column="pic" property="pic" />
         <result column="mark" property="mark" />
-        <result column="type" property="type" />
+        <result column="question_type" property="questionType" />
         <result column="subject_id" property="subjectId" />
         <result column="chapter" property="chapter" />
         <result column="remark" property="remark" />
@@ -19,6 +19,6 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, question, option, answer, explain, pic, mark, type, subject_id, chapter, remark
+        id, question, question_options, answer, question_explain, pic, mark, question_type, subject_id, chapter, remark
     </sql>
 </mapper>
