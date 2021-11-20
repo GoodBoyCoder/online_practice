@@ -9,6 +9,7 @@ import com.online.www.pojo.vo.LoginVo;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.result.CommonResult;
 import com.online.www.service.QuestionService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author online
  * @since 2021-11-19
  */
+@Api(tags = "题目管理")
 @RestController
 @RequestMapping("/api/question")
 public class QuestionController {
