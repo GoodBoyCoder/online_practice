@@ -1,5 +1,9 @@
 package com.online.www.mapper;
 
+import java.util.List;
+import java.util.Objects;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.online.www.pojo.po.UserQuestion;
 import org.apache.ibatis.annotations.Mapper;
@@ -10,4 +14,31 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserQuestionMapper extends BaseMapper<UserQuestion> {
+
+    /**
+     * 通过用户ID查询
+     *
+     * @param userId 用户ID
+     * @return 做题详情集合
+     */
+    default List<UserQuestion> selectByUser(Integer userId) {
+        return selectByUserAndStatus(userId, null);
+    }
+
+    /**
+     * 根据用户ID和做题状况查询
+     *
+     * @param userId       用户ID
+     * @param completeTrue 是否已做对
+     * @return 做题详情集合
+     */
+    default List<UserQuestion> selectByUserAndStatus(Integer userId, Boolean completeTrue) {
+        QueryWrapper<UserQuestion> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .select(UserQuestion::getId, UserQuestion::getQuestionId, UserQuestion::getUserId,
+                        UserQuestion::getAnswer, UserQuestion::getCompleteTrue, UserQuestion::getResult)
+                .eq(UserQuestion::getUserId, userId)
+                .eq(Objects.nonNull(completeTrue), UserQuestion::getCompleteTrue, completeTrue);
+        return selectList(queryWrapper);
+    }
 }

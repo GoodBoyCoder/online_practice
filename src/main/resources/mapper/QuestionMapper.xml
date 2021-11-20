@@ -21,5 +21,4 @@
     <sql id="Base_Column_List">
         id, question, option, answer, explain, pic, mark, type, subject_id, chapter, remark
     </sql>
-
 </mapper>
