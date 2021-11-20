@@ -2,6 +2,7 @@ package com.online.www.controller;
 
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotEmpty;
 
 import com.online.www.pojo.bo.LoginBo;
 import com.online.www.pojo.bo.SignUpBo;
@@ -11,9 +12,11 @@ import com.online.www.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "用户管理")
 @RestController
+@Validated
 @RequestMapping("/api/user")
 public class UserController {
     @Resource
@@ -41,6 +45,13 @@ public class UserController {
     @PostMapping("/register")
     public CommonResult<LoginVo> register(@Validated @RequestBody SignUpBo signUpBo) {
         return CommonResult.operateSuccess(userService.signUp(signUpBo));
+    }
+
+    @ApiOperation(value = "用户名验证")
+    @GetMapping("/checkUserName")
+    public CommonResult<Boolean> checkUserName(@RequestParam(value = "userName")
+                                                   @NotEmpty(message = "校验用户名需要非空") String userName) {
+        return CommonResult.operateSuccess(userService.checkUserName(userName));
     }
 }
 

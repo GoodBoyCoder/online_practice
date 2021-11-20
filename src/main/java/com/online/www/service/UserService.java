@@ -29,4 +29,12 @@ public interface UserService extends IService<User> {
      * @return loginVo/token
      */
     LoginVo signUp(SignUpBo signUpBo);
+
+    /**
+     * 检查用户名是否合法
+     *
+     * @param userName 用户名
+     * @return 是否合法
+     */
+    Boolean checkUserName(String userName);
 }

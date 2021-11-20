@@ -58,4 +58,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         return login(new LoginBo(signUpUser.getUserName(), signUpBo.getPassword()));
     }
+
+    @Override
+    public Boolean checkUserName(String userName) {
+        return baseMapper.getUser(userName) == null;
+    }
 }
