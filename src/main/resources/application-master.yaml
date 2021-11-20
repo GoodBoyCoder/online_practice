@@ -37,4 +37,4 @@ swagger:
     password: ENC(GEZC8359X1IwGDYw1c4acTOfRDOL7QenpNnXrNHKGI8=)
 
 security:
-  expire: 30000
+  expire: 7200000
