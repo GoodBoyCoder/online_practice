@@ -36,8 +36,8 @@ public class Question implements Serializable {
     /**
      * 选择
      */
-    @TableField("option")
-    private String option;
+    @TableField("question_options")
+    private String questionOptions;
 
     /**
      * 答案
@@ -48,8 +48,8 @@ public class Question implements Serializable {
     /**
      * 解释
      */
-    @TableField("explain")
-    private String explain;
+    @TableField("question_explain")
+    private String questionExplain;
 
     /**
      * 图片
@@ -66,8 +66,8 @@ public class Question implements Serializable {
     /**
      * 类型（0-单选 1-多选 2-判断）
      */
-    @TableField("type")
-    private Integer type;
+    @TableField("question_type")
+    private Integer questionType;
 
     /**
      * 科目
@@ -92,17 +92,17 @@ public class Question implements Serializable {
 
     public static final String QUESTION = "question";
 
-    public static final String OPTION = "option";
+    public static final String QUESTION_OPTIONS = "question_options";
 
     public static final String ANSWER = "answer";
 
-    public static final String EXPLAIN = "explain";
+    public static final String QUESTION_EXPLAIN = "question_explain";
 
     public static final String PIC = "pic";
 
     public static final String MARK = "mark";
 
-    public static final String TYPE = "type";
+    public static final String QUESTION_TYPE = "question_type";
 
     public static final String SUBJECT_ID = "subject_id";
 
