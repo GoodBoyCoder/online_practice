@@ -69,6 +69,24 @@ public class Question implements Serializable {
     @TableField("type")
     private Integer type;
 
+    /**
+     * 科目
+     */
+    @TableField("subject_id")
+    private Integer subjectId;
+
+    /**
+     * 章节
+     */
+    @TableField("chapter")
+    private String chapter;
+
+    /**
+     * 题目备注
+     */
+    @TableField("remark")
+    private String remark;
+
 
     public static final String ID = "id";
 
@@ -85,5 +103,11 @@ public class Question implements Serializable {
     public static final String MARK = "mark";
 
     public static final String TYPE = "type";
+
+    public static final String SUBJECT_ID = "subject_id";
+
+    public static final String CHAPTER = "chapter";
+
+    public static final String REMARK = "remark";
 
 }
