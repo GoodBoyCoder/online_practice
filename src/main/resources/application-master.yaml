@@ -35,3 +35,6 @@ swagger:
     enable: true
     username: ENC(W4JTJHPmXAhxfVV6C9qhJlYYxHjlsBoI)
     password: ENC(GEZC8359X1IwGDYw1c4acTOfRDOL7QenpNnXrNHKGI8=)
+
+security:
+  expire: 30000
