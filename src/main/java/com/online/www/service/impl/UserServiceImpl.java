@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.online.www.config.SecurityProperties;
 import com.online.www.mapper.UserMapper;
 import com.online.www.pojo.bo.LoginBo;
+import com.online.www.pojo.bo.SignUpBo;
 import com.online.www.pojo.po.User;
 import com.online.www.pojo.vo.LoginVo;
 import com.online.www.service.UserService;
@@ -39,5 +40,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //签发token
         long expireAt = System.currentTimeMillis() + securityProperties.getExpire();
         return new LoginVo(jwtUtil.creatToken(user.getId(), expireAt), expireAt);
+    }
+
+    @Override
+    public LoginVo signUp(SignUpBo signUpBo) {
+        //验证用户
+        User user = baseMapper.getUser(signUpBo.getUserName());
+        Assert.isNull(user, "用户名已经存在，个性点换一个吧！");
+
+        User signUpUser = new User();
+        signUpUser.setUserName(signUpBo.getUserName());
+        signUpUser.setPassward(MD5Util.getMD5String(signUpBo.getPassword()));
+        signUpUser.setPic(signUpBo.getPicUrl());
+
+        int insert = baseMapper.insert(signUpUser);
+        Assert.isTrue(insert == 1, "系统错误，用户注册失败");
+
+        return login(new LoginBo(signUpUser.getUserName(), signUpBo.getPassword()));
     }
 }

@@ -4,6 +4,7 @@ package com.online.www.controller;
 import javax.annotation.Resource;
 
 import com.online.www.pojo.bo.LoginBo;
+import com.online.www.pojo.bo.SignUpBo;
 import com.online.www.pojo.vo.LoginVo;
 import com.online.www.result.CommonResult;
 import com.online.www.service.UserService;
@@ -34,6 +35,12 @@ public class UserController {
     @PostMapping("/login")
     public CommonResult<LoginVo> login(@Validated @RequestBody LoginBo loginBo) {
         return CommonResult.operateSuccess(userService.login(loginBo));
+    }
+
+    @ApiOperation(value = "注册",notes = "用户注册")
+    @PostMapping("/register")
+    public CommonResult<LoginVo> register(@Validated @RequestBody SignUpBo signUpBo) {
+        return CommonResult.operateSuccess(userService.signUp(signUpBo));
     }
 }
 
