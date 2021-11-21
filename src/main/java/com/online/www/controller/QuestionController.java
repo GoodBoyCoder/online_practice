@@ -1,23 +1,18 @@
 package com.online.www.controller;
 
 
-import javax.annotation.Resource;
-
 import com.online.www.annotation.TokenRequired;
 import com.online.www.pojo.bo.QuestionSelectBo;
-import com.online.www.pojo.vo.LoginVo;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.result.CommonResult;
 import com.online.www.service.QuestionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
