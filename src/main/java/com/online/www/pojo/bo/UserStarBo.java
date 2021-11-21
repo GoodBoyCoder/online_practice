@@ -2,6 +2,9 @@ package com.online.www.pojo.bo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Lenovo
@@ -9,10 +12,10 @@ import lombok.Data;
 @Data
 public class UserStarBo {
 
-    @ApiModelProperty(value = "账户", required = true, example = "user")
     private Integer userId;
 
-    @ApiModelProperty(value = "账户", required = true, example = "user")
+    @NotNull(message = "问题ID不允许为空")
+    @ApiModelProperty(value = "问题ID", required = true)
     private Long questionId;
 
     private String remark;

@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 /**
  * @author Lenovo
  */
-@Validated
+
 @Api(tags = "试题收藏")
 @RestController
 @RequestMapping("/api/collection")
