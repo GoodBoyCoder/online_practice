@@ -1,9 +1,7 @@
 package com.online.www.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.online.www.pojo.bo.QuestionSelectBo;
 import com.online.www.pojo.bo.UserStarBo;
-import com.online.www.pojo.po.Question;
 import com.online.www.pojo.po.UserStar;
 import com.online.www.pojo.vo.QuestionVo;
 
