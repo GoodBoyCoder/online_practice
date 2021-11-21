@@ -2,7 +2,6 @@ package com.online.www.pojo.bo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.constraints.NotNull;
 
