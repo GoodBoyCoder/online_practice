@@ -5,8 +5,11 @@ import java.util.Objects;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.online.www.pojo.bo.QuestionSelectBo;
 import com.online.www.pojo.po.Question;
+import com.online.www.pojo.po.UserStar;
+import com.online.www.pojo.vo.QuestionVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.util.CollectionUtils;
 
@@ -39,5 +42,23 @@ public interface QuestionMapper extends BaseMapper<Question> {
                 .like(Objects.nonNull(bo.getChapter()), Question::getChapter, bo.getChapter())
                 .notIn(!CollectionUtils.isEmpty(questionDoneList), Question::getId, questionDoneList);
         return selectList(queryWrapper);
+    }
+
+    /**
+     * 分页获取被收藏题目
+     *
+     * @param userStarList 被收藏题目
+     * @param currentPage 当前页
+     * @param size 页大小
+     * @return Page<Question>
+     */
+    default Page<Question> selectQuestions(List<UserStar> userStarList, Integer currentPage, Integer size){
+        QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .select(Question::getId, Question::getQuestion, Question::getQuestionOptions, Question::getPic,
+                        Question::getQuestionType, Question::getMark, Question::getChapter, Question::getSubjectId,
+                        Question::getRemark)
+                .in(Question::getId,userStarList);
+        return selectPage(new Page<>(currentPage, size), queryWrapper);
     }
 }

@@ -1,9 +1,11 @@
 package com.online.www.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.online.www.mapper.QuestionMapper;
 import com.online.www.mapper.UserStarMapper;
 import com.online.www.pojo.bo.UserStarBo;
+import com.online.www.pojo.po.Question;
 import com.online.www.pojo.po.UserStar;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.service.UserStarService;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Lenovo
@@ -32,7 +36,19 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
     }
 
     @Override
-    public QuestionVo selectCollection(Integer questionId) {
-        return null;
+    public boolean selectCollection(Integer questionId) {
+        return true;
+    }
+
+    @Override
+    public Page<QuestionVo> getStarQuestion(Integer userId, Integer currentPage, Integer size) {
+        List<UserStar> userStarList = userStarMapper.selectStarQuestionByUserId(userId);
+        Page<Question> starQuestionPage = questionMapper.selectQuestions(userStarList,currentPage,size);
+        Page<QuestionVo> resultPage = new Page<>(currentPage, size);
+        List<QuestionVo> records = new ArrayList<>();
+        if (!starQuestionPage.getRecords().isEmpty()) {
+
+        }
+        return resultPage;
     }
 }
