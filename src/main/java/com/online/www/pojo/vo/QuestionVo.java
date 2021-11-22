@@ -85,7 +85,7 @@ public class QuestionVo {
     private Boolean stared;
 
 
-    public void convertFromQuestionWithNoAnswer(Question question) {
+    public QuestionVo convertFromQuestionWithNoAnswer(Question question) {
         this.id = question.getId();
         this.question = question.getQuestion();
         this.type = question.getQuestionType();
@@ -104,12 +104,15 @@ public class QuestionVo {
         this.subjectId = question.getSubjectId();
         this.chapter = question.getChapter();
         this.remark = question.getRemark();
+
+        return this;
     }
 
-    public void convertFromQuestion(Question question) {
+    public QuestionVo convertFromQuestion(Question question) {
         convertFromQuestionWithNoAnswer(question);
         this.answer = question.getAnswer();
         this.explain = question.getQuestionExplain();
+        return this;
     }
 
 }

@@ -1,5 +1,7 @@
 package com.online.www.mapper;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.online.www.pojo.po.UserStar;
@@ -12,18 +14,33 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserStarMapper extends BaseMapper<UserStar> {
     /**
      * 收藏题目
-     * @param userId 用户ID
+     *
+     * @param userId     用户ID
      * @param questionId 问题ID
-     * @return 插入条数
+     * @return UserStar
      */
-    default UserStar selectByQuestionId(Integer userId,Long questionId){
+    default UserStar selectByQuestionId(Integer userId, Long questionId) {
         QueryWrapper<UserStar> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
                 .select(UserStar::getQuestionId, UserStar::getUserId)
                 .eq(UserStar::getUserId, userId)
                 .eq(UserStar::getQuestionId, questionId);
         return selectOne(queryWrapper);
-    };
+    }
 
-
+    /**
+     * 收藏题目
+     *
+     * @param userId         用户ID
+     * @param questionIdList 问题ID集合
+     * @return 收藏集合
+     */
+    default List<UserStar> selectByQuestionIdList(Integer userId, List<Long> questionIdList) {
+        QueryWrapper<UserStar> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .select(UserStar::getQuestionId, UserStar::getUserId)
+                .eq(UserStar::getUserId, userId)
+                .in(UserStar::getQuestionId, questionIdList);
+        return selectList(queryWrapper);
+    }
 }

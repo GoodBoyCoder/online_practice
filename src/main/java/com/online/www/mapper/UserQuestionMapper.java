@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.online.www.pojo.po.UserQuestion;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.util.CollectionUtils;
@@ -67,5 +68,26 @@ public interface UserQuestionMapper extends BaseMapper<UserQuestion> {
                 .eq(Objects.nonNull(questionId), UserQuestion::getQuestionId, questionId)
                 .eq(Objects.nonNull(completeTrue), UserQuestion::getCompleteTrue, completeTrue);
         return selectList(queryWrapper);
+    }
+
+    /**
+     * 分页获取做题详情
+     *
+     * @param userId       用户ID
+     * @param completeTrue 完成状态
+     * @param currentPage  当前页
+     * @param size         页大小
+     * @return Page<UserQuestion>
+     */
+    default Page<UserQuestion> selectQuestionPage(Integer userId, Boolean completeTrue, Integer currentPage, Integer size) {
+        QueryWrapper<UserQuestion> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .select(UserQuestion::getId, UserQuestion::getQuestionId, UserQuestion::getUserId,
+                        UserQuestion::getAnswer, UserQuestion::getCompleteTrue, UserQuestion::getResult,
+                        UserQuestion::getModifyTime)
+                .eq(UserQuestion::getUserId, userId)
+                .eq(UserQuestion::getCompleteTrue, completeTrue)
+                .orderByAsc(UserQuestion::getModifyTime);
+        return selectPage(new Page<>(currentPage, size), queryWrapper);
     }
 }

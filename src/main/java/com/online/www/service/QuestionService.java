@@ -27,6 +27,7 @@ public interface QuestionService extends IService<Question> {
 
     /**
      * 获取作答结果
+     *
      * @param judgeBo 答题情况
      * @return 判断结果
      */
