@@ -1,6 +1,7 @@
 package com.online.www.pojo.po;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -56,6 +57,12 @@ public class UserQuestion implements Serializable {
     @TableField("complete_true")
     private Boolean completeTrue;
 
+    /**
+     * 做题时间
+     */
+    @TableField("modify_time")
+    private LocalDateTime modifyTime;
+
 
     public static final String ID = "id";
 
@@ -68,4 +75,6 @@ public class UserQuestion implements Serializable {
     public static final String RESULT = "result";
 
     public static final String COMPLETE_TRUE = "complete_true";
+
+    public static final String MODIFY_TIME = "modify_time";
 }
