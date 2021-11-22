@@ -78,6 +78,12 @@ public class QuestionVo {
     @ApiModelProperty(value = "题目备注")
     private String remark;
 
+    /**
+     * 题目是否已经收藏（true-已经收藏）
+     */
+    @ApiModelProperty(value = "题目是否已经收藏（true-已经收藏）")
+    private Boolean stared;
+
 
     public void convertFromQuestionWithNoAnswer(Question question) {
         this.id = question.getId();
@@ -90,6 +96,8 @@ public class QuestionVo {
                 throw new RuntimeException("获取题目异常，请稍后再试");
             }
             this.option = Arrays.asList(option.split("#"));
+        } else if (type.equals(QuestionTypeConstant.JUDGE)) {
+            this.option = Arrays.asList("对", "错");
         }
         this.pic = question.getPic();
         this.mark = question.getMark();

@@ -4,7 +4,9 @@ package com.online.www.controller;
 import javax.annotation.Resource;
 
 import com.online.www.annotation.TokenRequired;
+import com.online.www.pojo.bo.QuestionJudgeBo;
 import com.online.www.pojo.bo.QuestionSelectBo;
+import com.online.www.pojo.vo.QuestionJudgeVo;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.result.CommonResult;
 import com.online.www.service.QuestionService;
@@ -36,6 +38,14 @@ public class QuestionController extends BaseController {
     @PostMapping("/getRandomQuestion")
     public CommonResult<QuestionVo> getRandomQuestion(@Validated @RequestBody QuestionSelectBo selectBo) {
         return CommonResult.operateSuccess(questionService.getRandomQuestion(selectBo, getUserId()));
+    }
+
+    @ApiOperation(value = "题目判断")
+    @TokenRequired
+    @PostMapping("/questionJudge")
+    public CommonResult<QuestionJudgeVo> getQuestionJudge(@Validated @RequestBody QuestionJudgeBo judgeBo) {
+        judgeBo.setUserId(getUserId());
+        return CommonResult.operateSuccess(questionService.getQuestionJudge(judgeBo));
     }
 }
 
