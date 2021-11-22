@@ -90,6 +90,8 @@ public class QuestionVo {
                 throw new RuntimeException("获取题目异常，请稍后再试");
             }
             this.option = Arrays.asList(option.split("#"));
+        } else if (type.equals(QuestionTypeConstant.JUDGE)) {
+            this.option = Arrays.asList("对", "错");
         }
         this.pic = question.getPic();
         this.mark = question.getMark();
