@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Validated
 @RequestMapping("/api/user")
-public class UserController {
+public class UserController extends BaseController {
     @Resource
     private UserService userService;
 
