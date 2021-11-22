@@ -63,6 +63,9 @@ public class UserQuestion implements Serializable {
     @TableField("modify_time")
     private LocalDateTime modifyTime;
 
+    @TableField("judge_exam_id")
+    private Long judgeExamId;
+
 
     public static final String ID = "id";
 

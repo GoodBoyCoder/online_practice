@@ -2,6 +2,8 @@ package com.online.www.service.impl;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -32,14 +34,27 @@ public class UserQuestionServiceImpl extends ServiceImpl<UserQuestionMapper, Use
 
     @Override
     public Page<QuestionVo> getErrorQuestion(Integer userId, Integer currentPage, Integer size) {
-        Page<UserQuestion> userQuestionPage = baseMapper.selectQuestionPage(userId, false, currentPage, size);
+        List<UserQuestion> userQuestionList = baseMapper.selectListByUserId(userId);
+        //筛选出每道题的最新答题结果
+        Map<Long, UserQuestion> userQuestionMap = userQuestionList.stream()
+                .collect(Collectors.toMap(UserQuestion::getQuestionId, Function.identity(),
+                        (c1, c2) -> c1.getModifyTime().isAfter(c2.getModifyTime()) ? c1 : c2));
+        userQuestionMap.entrySet().removeIf(key -> key.getValue().getCompleteTrue());
+        Collection<UserQuestion> userQuestionWithWrong = userQuestionMap.values();
+        //手动分页
+        List<UserQuestion> questionCollect = userQuestionWithWrong.stream()
+                .sorted(Comparator.comparing(UserQuestion::getModifyTime))
+                .skip((long) size * (currentPage - 1))
+                .limit(size)
+                .collect(Collectors.toList());
+
         Page<QuestionVo> resultPage = new Page<>(currentPage, size);
-        resultPage.setTotal(userQuestionPage.getTotal());
+        resultPage.setTotal(userQuestionWithWrong.size());
 
         List<QuestionVo> records = new ArrayList<>();
-        if (!userQuestionPage.getRecords().isEmpty()) {
+        if (!userQuestionWithWrong.isEmpty()) {
             //转换记录
-            List<Long> questionIds = userQuestionPage.getRecords().stream()
+            List<Long> questionIds = questionCollect.stream()
                     .map(UserQuestion::getQuestionId)
                     .distinct()
                     .collect(Collectors.toList());

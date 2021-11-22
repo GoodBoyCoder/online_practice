@@ -19,5 +19,6 @@ public class QuestionJudgeBo {
     @ApiModelProperty(value = "答案集合")
     private List<String> answerList;
 
+    @ApiModelProperty(hidden = true)
     private Integer userId;
 }
