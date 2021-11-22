@@ -5,13 +5,17 @@ import java.io.Serializable;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.online.www.constant.QuestionTypeConstant;
+import com.online.www.pojo.po.strategy.DefaultStrategy;
+import com.online.www.pojo.po.strategy.MultiStrategy;
+import com.online.www.pojo.po.strategy.Strategy;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author online
@@ -110,4 +114,20 @@ public class Question implements Serializable {
 
     public static final String REMARK = "remark";
 
+    /**
+     * 判题策略
+     */
+    @TableField(exist = false)
+    private Strategy strategy;
+
+    public Strategy getStrategy() {
+        if (null == strategy) {
+            if (null == questionType) {
+                strategy = new DefaultStrategy();
+            } else {
+                strategy = questionType.equals(QuestionTypeConstant.MULTIPLE) ? new MultiStrategy() : new DefaultStrategy();
+            }
+        }
+        return strategy;
+    }
 }

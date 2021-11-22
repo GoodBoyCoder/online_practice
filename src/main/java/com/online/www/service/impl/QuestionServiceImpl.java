@@ -10,14 +10,18 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.online.www.mapper.QuestionMapper;
 import com.online.www.mapper.UserQuestionMapper;
 import com.online.www.mapper.UserStarMapper;
+import com.online.www.pojo.bo.QuestionJudgeBo;
 import com.online.www.pojo.bo.QuestionSelectBo;
 import com.online.www.pojo.po.Question;
 import com.online.www.pojo.po.UserQuestion;
 import com.online.www.pojo.po.UserStar;
+import com.online.www.pojo.vo.QuestionJudgeVo;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.service.QuestionService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * <p>
@@ -61,5 +65,29 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             return questionVo;
         }
         return null;
+    }
+
+    @Override
+    public QuestionJudgeVo getQuestionJudge(QuestionJudgeBo judgeBo) {
+        Question question = baseMapper.selectById(judgeBo.getQuestionId());
+        Assert.notNull(question, "题目不存在！");
+
+        QuestionJudgeVo questionJudgeVo = new QuestionJudgeVo();
+        questionJudgeVo.setAnswer(question.getAnswer());
+        questionJudgeVo.setExplain(question.getQuestionExplain());
+
+        //判题
+        List<String> answerList = judgeBo.getAnswerList();
+        if (CollectionUtils.isEmpty(answerList)) {
+            questionJudgeVo.setCorrect(false);
+        } else {
+            String reply = answerList.stream()
+                    .filter(s -> !StringUtils.isEmpty(s))
+                    .map(String::trim)
+                    .map(an -> an.substring(0, 1))
+                    .collect(Collectors.joining());
+            questionJudgeVo.setCorrect(question.getStrategy().judge(question.getAnswer(), reply));
+        }
+        return questionJudgeVo;
     }
 }
