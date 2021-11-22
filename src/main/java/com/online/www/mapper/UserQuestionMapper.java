@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.online.www.pojo.po.UserQuestion;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author GoodBoyCoder
@@ -34,6 +35,18 @@ public interface UserQuestionMapper extends BaseMapper<UserQuestion> {
      */
     default List<UserQuestion> selectByUserAndStatus(Integer userId, Boolean completeTrue) {
         return selectByUserAndQuestionWithStatus(userId, null, completeTrue);
+    }
+
+    /**
+     * 根据用户ID和题目ID查询
+     *
+     * @param userId     用户ID
+     * @param questionId 题目ID
+     * @return 做题详情（一题一详情）
+     */
+    default UserQuestion selectByUserAndQuestion(Integer userId, Long questionId) {
+        List<UserQuestion> userQuestions = selectByUserAndQuestionWithStatus(userId, questionId, null);
+        return CollectionUtils.isEmpty(userQuestions) ? null : userQuestions.get(0);
     }
 
     /**

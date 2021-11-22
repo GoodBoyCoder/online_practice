@@ -92,27 +92,20 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             questionJudgeVo.setCorrect(question.getStrategy().judge(question.getAnswer(), reply));
 
             //保存做题记录
-            UserQuestion userQuestion = new UserQuestion();
-            userQuestion.setQuestionId(question.getId());
-            userQuestion.setUserId(judgeBo.getUserId());
-            userQuestion.setAnswer(reply);
-            userQuestion.setCompleteTrue(questionJudgeVo.getCorrect());
-            userQuestion.setModifyTime(LocalDateTime.now());
-            if (questionJudgeVo.getCorrect()) {
-                //正确的题目如果已经做了需要做更新
-                List<UserQuestion> userQuestions = userQuestionMapper.selectByUserAndQuestionWithStatus(judgeBo.getUserId(),
-                        judgeBo.getQuestionId(), true);
-                if (CollectionUtils.isEmpty(userQuestions)) {
-                    //第一次做
-                    userQuestionMapper.insert(userQuestion);
-                } else {
-                    UserQuestion userQuestionRight = userQuestions.get(0);
-                    userQuestionRight.setAnswer(reply);
-                    userQuestionRight.setModifyTime(LocalDateTime.now());
-                    userQuestionMapper.updateById(userQuestionRight);
-                }
+            UserQuestion userQuestion = userQuestionMapper.selectByUserAndQuestion(judgeBo.getUserId(), judgeBo.getQuestionId());
+            if (Objects.isNull(userQuestion)) {
+                UserQuestion userQuestionToInsert = new UserQuestion();
+                userQuestionToInsert.setQuestionId(question.getId());
+                userQuestionToInsert.setUserId(judgeBo.getUserId());
+                userQuestionToInsert.setAnswer(reply);
+                userQuestionToInsert.setCompleteTrue(questionJudgeVo.getCorrect());
+                userQuestionToInsert.setModifyTime(LocalDateTime.now());
+                userQuestionMapper.insert(userQuestionToInsert);
             } else {
-                userQuestionMapper.insert(userQuestion);
+                userQuestion.setAnswer(reply);
+                userQuestion.setCompleteTrue(questionJudgeVo.getCorrect());
+                userQuestion.setModifyTime(LocalDateTime.now());
+                userQuestionMapper.updateById(userQuestion);
             }
         }
 
