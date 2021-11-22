@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class UserStarBo {
-
+    @ApiModelProperty(hidden = true)
     private Integer userId;
 
     @NotNull(message = "问题ID不允许为空")
