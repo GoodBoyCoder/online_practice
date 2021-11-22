@@ -1,6 +1,7 @@
 package com.online.www.service.impl;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +20,7 @@ import com.online.www.pojo.vo.QuestionJudgeVo;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.service.QuestionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -68,6 +70,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public QuestionJudgeVo getQuestionJudge(QuestionJudgeBo judgeBo) {
         Question question = baseMapper.selectById(judgeBo.getQuestionId());
         Assert.notNull(question, "题目不存在！");
@@ -87,7 +90,32 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     .map(an -> an.substring(0, 1))
                     .collect(Collectors.joining());
             questionJudgeVo.setCorrect(question.getStrategy().judge(question.getAnswer(), reply));
+
+            //保存做题记录
+            UserQuestion userQuestion = new UserQuestion();
+            userQuestion.setQuestionId(question.getId());
+            userQuestion.setUserId(judgeBo.getUserId());
+            userQuestion.setAnswer(reply);
+            userQuestion.setCompleteTrue(questionJudgeVo.getCorrect());
+            userQuestion.setModifyTime(LocalDateTime.now());
+            if (questionJudgeVo.getCorrect()) {
+                //正确的题目如果已经做了需要做更新
+                List<UserQuestion> userQuestions = userQuestionMapper.selectByUserAndQuestionWithStatus(judgeBo.getUserId(),
+                        judgeBo.getQuestionId(), true);
+                if (CollectionUtils.isEmpty(userQuestions)) {
+                    //第一次做
+                    userQuestionMapper.insert(userQuestion);
+                } else {
+                    UserQuestion userQuestionRight = userQuestions.get(0);
+                    userQuestionRight.setAnswer(reply);
+                    userQuestionRight.setModifyTime(LocalDateTime.now());
+                    userQuestionMapper.updateById(userQuestionRight);
+                }
+            } else {
+                userQuestionMapper.insert(userQuestion);
+            }
         }
+
         return questionJudgeVo;
     }
 }

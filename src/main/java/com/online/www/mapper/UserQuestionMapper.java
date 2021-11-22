@@ -33,11 +33,25 @@ public interface UserQuestionMapper extends BaseMapper<UserQuestion> {
      * @return 做题详情集合
      */
     default List<UserQuestion> selectByUserAndStatus(Integer userId, Boolean completeTrue) {
+        return selectByUserAndQuestionWithStatus(userId, null, completeTrue);
+    }
+
+    /**
+     * 通过用户ID-题目ID查询
+     *
+     * @param userId       用户ID
+     * @param questionId   题目ID
+     * @param completeTrue 做题结果
+     * @return 做题详情集合
+     */
+    default List<UserQuestion> selectByUserAndQuestionWithStatus(Integer userId, Long questionId, Boolean completeTrue) {
         QueryWrapper<UserQuestion> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
                 .select(UserQuestion::getId, UserQuestion::getQuestionId, UserQuestion::getUserId,
-                        UserQuestion::getAnswer, UserQuestion::getCompleteTrue, UserQuestion::getResult)
+                        UserQuestion::getAnswer, UserQuestion::getCompleteTrue, UserQuestion::getResult,
+                        UserQuestion::getModifyTime)
                 .eq(UserQuestion::getUserId, userId)
+                .eq(Objects.nonNull(questionId), UserQuestion::getQuestionId, questionId)
                 .eq(Objects.nonNull(completeTrue), UserQuestion::getCompleteTrue, completeTrue);
         return selectList(queryWrapper);
     }
