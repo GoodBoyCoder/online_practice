@@ -78,6 +78,12 @@ public class QuestionVo {
     @ApiModelProperty(value = "题目备注")
     private String remark;
 
+    /**
+     * 题目是否已经收藏（true-已经收藏）
+     */
+    @ApiModelProperty(value = "题目是否已经收藏（true-已经收藏）")
+    private Boolean stared;
+
 
     public void convertFromQuestionWithNoAnswer(Question question) {
         this.id = question.getId();
