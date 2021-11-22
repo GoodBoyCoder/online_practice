@@ -8,13 +8,13 @@ public class QuestionTypeConstant {
     /**
      * 单选
      */
-    public static final int SINGLE = 0;
+    public static final int SINGLE = 2;
     /**
      * 多选
      */
-    public static final int MULTIPLE = 1;
+    public static final int MULTIPLE = 3;
     /**
      * 判断
      */
-    public static final int JUDGE = 2;
+    public static final int JUDGE = 1;
 }
