@@ -48,7 +48,7 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
         List<QuestionVo> records = new ArrayList<>();
         if (!starQuestionList.isEmpty()) {
             records = starQuestionList.stream()
-                    .map(question -> new QuestionVo().convertFromQuestion(question))
+                    .map(question -> new QuestionVo().convertStarFromQuestion(question))
                     .collect(Collectors.toList());
         }
         resultPage.setRecords(records);
