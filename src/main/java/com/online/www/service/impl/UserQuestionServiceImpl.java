@@ -3,6 +3,7 @@ package com.online.www.service.impl;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.online.www.constant.QuestionTypeConstant;
 import com.online.www.mapper.QuestionMapper;
 import com.online.www.mapper.UserQuestionMapper;
 import com.online.www.mapper.UserStarMapper;
@@ -20,6 +22,7 @@ import com.online.www.pojo.po.UserStar;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.service.UserQuestionService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author GoodBoyCoder
@@ -59,9 +62,24 @@ public class UserQuestionServiceImpl extends ServiceImpl<UserQuestionMapper, Use
                     .distinct()
                     .collect(Collectors.toList());
             List<Question> questions = questionMapper.selectBatchIds(questionIds);
-            records = questions.stream()
-                    .map(question -> new QuestionVo().convertFromQuestion(question))
-                    .collect(Collectors.toList());
+            Map<Long, Question> questionMap = questions.stream().collect(Collectors.toMap(Question::getId, Function.identity()));
+
+            records = questionCollect.stream()
+                    .map(userQuestion -> {
+                        Question question = questionMap.get(userQuestion.getQuestionId());
+                        QuestionVo questionVo = new QuestionVo();
+                        questionVo.convertFromQuestion(question);
+                        if (CollectionUtils.isEmpty(questionVo.getOption())) {
+                            questionVo.setMyAnswer(Collections.singletonList(userQuestion.getAnswer()));
+                        } else {
+                            List<String> myAnswers = questionVo.getOption().stream()
+                                    .map(String::trim)
+                                    .filter(option -> userQuestion.getAnswer().indexOf(option.charAt(0)) >= 0)
+                                    .collect(Collectors.toList());
+                            questionVo.setMyAnswer(myAnswers);
+                        }
+                        return questionVo;
+                    }).collect(Collectors.toList());
 
             //检查收藏
             List<UserStar> userStars = userStarMapper.selectByQuestionIdList(userId, questionIds);
@@ -69,7 +87,6 @@ public class UserQuestionServiceImpl extends ServiceImpl<UserQuestionMapper, Use
                     .collect(Collectors.toMap(UserStar::getQuestionId, Function.identity()));
             records.forEach(record -> record.setStared(null != userStarMap.get(record.getId())));
         }
-
         resultPage.setRecords(records);
         return resultPage;
     }
