@@ -41,20 +41,4 @@ public interface QuestionMapper extends BaseMapper<Question> {
                 .notIn(!CollectionUtils.isEmpty(questionDoneList), Question::getId, questionDoneList);
         return selectList(queryWrapper);
     }
-
-    /**
-     * 分页获取被收藏题目
-     *
-     * @param userStarList 被收藏题目
-     * @return Page<Question>
-     */
-    default List<Question> selectStarQuestions(List<Long> userStarList) {
-        QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .select(Question::getId, Question::getQuestion, Question::getQuestionOptions, Question::getPic,
-                        Question::getQuestionType, Question::getMark, Question::getChapter, Question::getSubjectId,
-                        Question::getRemark)
-                .in(Question::getId, userStarList);
-        return selectList(queryWrapper);
-    }
 }
