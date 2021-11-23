@@ -7,6 +7,8 @@ import com.online.www.pojo.po.Question;
 import com.online.www.pojo.vo.QuestionJudgeVo;
 import com.online.www.pojo.vo.QuestionVo;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务类
@@ -32,4 +34,12 @@ public interface QuestionService extends IService<Question> {
      * @return 判断结果
      */
     QuestionJudgeVo getQuestionJudge(QuestionJudgeBo judgeBo);
+
+    /**
+     * 获取作答结果列表
+     * @param questionJudgeBoList 答题情况列表
+     * @param userId 用户ID
+     * @return 判断结果列表
+     */
+    List<QuestionJudgeVo> getQuestionJudgeList(List<QuestionJudgeBo> questionJudgeBoList, Integer userId);
 }
