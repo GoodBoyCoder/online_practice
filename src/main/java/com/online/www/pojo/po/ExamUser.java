@@ -40,18 +40,21 @@ public class ExamUser implements Serializable {
     private Integer examId;
 
     /**
-     * 做题情况ID（user_question）
+     * 考试题目数
      */
-    @TableField("make_id")
-    private Long makeId;
+    @TableField("total_question")
+    private Integer totalQuestion;
 
+    /**
+     * 答对题目数
+     */
+    @TableField("pass_question")
+    private Integer passQuestion;
 
-    public static final String ID = "id";
-
-    public static final String USER_ID = "user_id";
-
-    public static final String EXAM_ID = "exam_id";
-
-    public static final String MAKE_ID = "make_id";
+    /**
+     * 考试总分
+     */
+    @TableField("total_score")
+    private Double totalScore;
 
 }
