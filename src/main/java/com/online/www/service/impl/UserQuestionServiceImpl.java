@@ -60,7 +60,7 @@ public class UserQuestionServiceImpl extends ServiceImpl<UserQuestionMapper, Use
                     .collect(Collectors.toList());
             List<Question> questions = questionMapper.selectBatchIds(questionIds);
             records = questions.stream()
-                    .map(question -> new QuestionVo().convertFromQuestionWithNoAnswer(question))
+                    .map(question -> new QuestionVo().convertFromQuestion(question))
                     .collect(Collectors.toList());
 
             //检查收藏
