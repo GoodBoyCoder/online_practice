@@ -5,6 +5,7 @@ import com.online.www.pojo.bo.LoginBo;
 import com.online.www.pojo.bo.SignUpBo;
 import com.online.www.pojo.po.User;
 import com.online.www.pojo.vo.LoginVo;
+import com.online.www.pojo.vo.UserVo;
 
 /**
  * <p>
@@ -37,4 +38,12 @@ public interface UserService extends IService<User> {
      * @return 是否合法
      */
     Boolean checkUserName(String userName);
+
+    /**
+     * 获取用户信息
+     *
+     * @param userId 用户ID
+     * @return UserVo
+     */
+    UserVo getUserInfo(Integer userId);
 }
