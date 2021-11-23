@@ -57,4 +57,5 @@ public interface UserStarMapper extends BaseMapper<UserStar> {
                 .eq(UserStar::getUserId, userId);
         return selectList(queryWrapper);
     }
+
 }

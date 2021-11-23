@@ -14,8 +14,9 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 /**
  * @author Lenovo
@@ -36,10 +37,6 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
         return userStarMapper.insert(new UserStar(userStarBo.getUserId(), userStarBo.getQuestionId())) == 1;
     }
 
-    @Override
-    public boolean selectCollection(Integer questionId) {
-        return true;
-    }
 
     @Override
     public Page<QuestionVo> getStarQuestion(Integer userId, Integer currentPage, Integer size) {
@@ -52,6 +49,7 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
         }
         List<Question> starQuestionList = questionMapper.selectStarQuestions(starQuestionId);
         Page<QuestionVo> resultPage = new Page<>(currentPage, size);
+        resultPage.setTotal(starQuestionList.size());
         List<QuestionVo> records = new ArrayList<>();
         if (!starQuestionList.isEmpty()) {
             for (Question q : starQuestionList) {
@@ -60,5 +58,14 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
         }
         resultPage.setRecords(records);
         return resultPage;
+    }
+
+    @Override
+    public Boolean deleteStar(UserStarBo userStarBo) {
+        Assert.notNull(userStarMapper.selectByQuestionId(userStarBo.getUserId(), userStarBo.getQuestionId()), "题目未收藏！");
+        Map<String,Object> map = new HashMap<>(2);
+        map.put("user_id",userStarBo.getUserId());
+        map.put("question_id",userStarBo.getQuestionId());
+        return userStarMapper.deleteByMap(map) == 1;
     }
 }

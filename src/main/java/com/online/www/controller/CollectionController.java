@@ -40,4 +40,12 @@ public class CollectionController extends BaseController {
             @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
         return CommonResult.operateSuccess(userStarService.getStarQuestion(getUserId(), currentPage, size));
     }
+
+    @ApiOperation(value = "移出收藏", notes ="将当前题目移出收藏表")
+    @TokenRequired
+    @PostMapping("/deleteStar")
+    public CommonResult<Boolean> deleteStar(@RequestBody @Validated UserStarBo userStarBo){
+        userStarBo.setUserId(getUserId());
+        return CommonResult.autoResult(userStarService.deleteStar(userStarBo));
+    }
 }
