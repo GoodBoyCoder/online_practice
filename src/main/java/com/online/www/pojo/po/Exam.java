@@ -6,6 +6,12 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.core.mapper.Mapper;
+import com.online.www.constant.SubjectIdConstant;
+import com.online.www.mapper.QuestionMapper;
+import com.online.www.pojo.po.strategy.paper.PaperFormForSubjectFourStrategy;
+import com.online.www.pojo.po.strategy.paper.PaperFormForSubjectOneStrategy;
+import com.online.www.pojo.po.strategy.paper.PaperFormStrategy;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -64,5 +70,28 @@ public class Exam implements Serializable {
     public static final String CREAT_TIME = "creat_time";
 
     public static final String SUBJECT_ID = "subject_id";
+
+    @TableField(exist = false)
+    private PaperFormStrategy paperFormStrategy;
+
+    public PaperFormStrategy getPaperFormStrategy(QuestionMapper questionMapper) {
+        if (null == paperFormStrategy) {
+            if (null == subjectId) {
+                throw new RuntimeException("无策略可用！");
+            }
+
+            switch (subjectId) {
+                case SubjectIdConstant.SUBJECT_ONE :
+                    paperFormStrategy = new PaperFormForSubjectOneStrategy(questionMapper);
+                    break;
+                case SubjectIdConstant.SUBJECT_FOUR:
+                    paperFormStrategy = new PaperFormForSubjectFourStrategy(questionMapper);
+                    break;
+                default:
+                    throw new RuntimeException("无策略可用！");
+            }
+        }
+        return paperFormStrategy;
+    }
 
 }
