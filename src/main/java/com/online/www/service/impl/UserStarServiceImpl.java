@@ -14,9 +14,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -43,24 +41,17 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
     public Page<QuestionVo> getStarQuestion(Integer userId, Integer currentPage, Integer size) {
         List<UserStar> userStarList = userStarMapper.selectStarQuestionByUserId(userId);
         List<Long> starQuestionId = new ArrayList<>();
-        if (!userStarList.isEmpty()){
-            for (UserStar us:userStarList) {
-                starQuestionId.add(us.getQuestionId());
-            }
-        }
+        starQuestionId = userStarList.stream()
+                .map(UserStar::getQuestionId).collect(Collectors.toList());
         List<Question> starQuestionList = questionMapper.selectBatchIds(starQuestionId);
-
         Page<QuestionVo> resultPage = new Page<>(currentPage, size);
         resultPage.setTotal(starQuestionList.size());
-        List<Question> questionCollect = starQuestionList.stream()
-                .skip((long) size * (currentPage - 1))
-                .limit(size)
-                .collect(Collectors.toList());
         List<QuestionVo> records = new ArrayList<>();
-        if (!questionCollect.isEmpty()) {
-            for (Question q : questionCollect) {
-                records.add(new QuestionVo().convertFromQuestion(q));
-            }
+        Page<Question> questionPage = questionMapper.selectStarQuestionsPage(starQuestionId,currentPage,size);
+        if (!questionPage.getRecords().isEmpty()){
+            records = questionPage.getRecords().stream()
+                    .map(question -> new QuestionVo().convertFromQuestion(question))
+                    .collect(Collectors.toList());
         }
         resultPage.setRecords(records);
         return resultPage;
@@ -69,9 +60,6 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
     @Override
     public Boolean deleteStar(UserStarBo userStarBo) {
         Assert.notNull(userStarMapper.selectByQuestionId(userStarBo.getUserId(), userStarBo.getQuestionId()), "题目未收藏！");
-        Map<String,Object> map = new HashMap<>(2);
-        map.put("user_id",userStarBo.getUserId());
-        map.put("question_id",userStarBo.getQuestionId());
-        return userStarMapper.deleteByMap(map) == 1;
+        return userStarMapper.deleteStarQuestion(userStarBo) == 1;
     }
 }

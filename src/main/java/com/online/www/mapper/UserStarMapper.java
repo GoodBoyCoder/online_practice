@@ -2,6 +2,7 @@ package com.online.www.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.online.www.pojo.bo.UserStarBo;
 import com.online.www.pojo.po.UserStar;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -56,6 +57,21 @@ public interface UserStarMapper extends BaseMapper<UserStar> {
                 .select(UserStar::getQuestionId, UserStar::getUserId)
                 .eq(UserStar::getUserId, userId);
         return selectList(queryWrapper);
+    }
+
+    /**
+     * 删除收藏题目
+     *
+     * @param userStarBo userStarBo
+     * @return 删除条数
+     */
+    default int deleteStarQuestion(UserStarBo userStarBo) {
+        QueryWrapper<UserStar> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .select(UserStar::getQuestionId, UserStar::getUserId)
+                .eq(UserStar::getUserId, userStarBo.getUserId())
+                .eq(UserStar::getQuestionId, userStarBo.getQuestionId());
+        return delete(queryWrapper);
     }
 
 }

@@ -2,6 +2,7 @@ package com.online.www.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.online.www.pojo.bo.QuestionSelectBo;
 import com.online.www.pojo.po.Question;
 import org.apache.ibatis.annotations.Mapper;
@@ -42,20 +43,21 @@ public interface QuestionMapper extends BaseMapper<Question> {
     }
 
     /**
-     * 获取被收藏题目
+     * 分页获取被收藏题目
      *
      * @param userStarList 被收藏题目
-     //* @param currentPage 当前页
-     //* @param size 页大小
-     * @return List<Question>
+     * @param currentPage 当前页
+     * @param size 页大小
+     * @return Page<Question>
      */
-    default List<Question> selectStarQuestions(List<Long> userStarList){
+    default Page<Question> selectStarQuestionsPage(List<Long> userStarList, Integer currentPage, Integer size) {
         QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+        Page<Question> resultPage = new Page<>(currentPage,size);
         queryWrapper.lambda()
                 .select(Question::getId, Question::getQuestion, Question::getQuestionOptions, Question::getPic,
                         Question::getQuestionType, Question::getMark, Question::getChapter, Question::getSubjectId,
                         Question::getRemark)
-                .in(Question::getId,userStarList);
-        return selectList(queryWrapper);
+                .in(Question::getId, userStarList);
+        return selectPage(resultPage,queryWrapper);
     }
 }
