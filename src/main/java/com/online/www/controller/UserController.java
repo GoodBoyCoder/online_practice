@@ -62,5 +62,6 @@ public class UserController extends BaseController {
     public CommonResult<UserVo> getUserInfo() {
         return CommonResult.operateSuccess(userService.getUserInfo(getUserId()));
     }
+
 }
 

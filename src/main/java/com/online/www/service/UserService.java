@@ -18,6 +18,7 @@ import com.online.www.pojo.vo.UserVo;
 public interface UserService extends IService<User> {
     /**
      * 用户登录
+     *
      * @param loginBo 登录用户/密码
      * @return loginVO/token
      */
@@ -46,4 +47,5 @@ public interface UserService extends IService<User> {
      * @return UserVo
      */
     UserVo getUserInfo(Integer userId);
+
 }
