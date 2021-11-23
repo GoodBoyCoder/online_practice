@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Lenovo
@@ -43,12 +44,21 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
     @Override
     public Page<QuestionVo> getStarQuestion(Integer userId, Integer currentPage, Integer size) {
         List<UserStar> userStarList = userStarMapper.selectStarQuestionByUserId(userId);
-        Page<Question> starQuestionPage = questionMapper.selectQuestions(userStarList,currentPage,size);
+        List<Long> starQuestionId = new ArrayList<>();
+        if (!userStarList.isEmpty()){
+            for (UserStar us:userStarList) {
+                starQuestionId.add(us.getQuestionId());
+            }
+        }
+        List<Question> starQuestionList = questionMapper.selectStarQuestions(starQuestionId);
         Page<QuestionVo> resultPage = new Page<>(currentPage, size);
         List<QuestionVo> records = new ArrayList<>();
-        if (!starQuestionPage.getRecords().isEmpty()) {
-
+        if (!starQuestionList.isEmpty()) {
+            for (Question q : starQuestionList) {
+                records.add(new QuestionVo().convertFromQuestion(q));
+            }
         }
+        resultPage.setRecords(records);
         return resultPage;
     }
 }

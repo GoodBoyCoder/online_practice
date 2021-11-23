@@ -2,17 +2,16 @@ package com.online.www.controller;
 
 import javax.annotation.Resource;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.online.www.annotation.TokenRequired;
 import com.online.www.pojo.bo.UserStarBo;
+import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.result.CommonResult;
 import com.online.www.service.UserStarService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Lenovo
@@ -31,5 +30,14 @@ public class CollectionController extends BaseController {
     public CommonResult<Boolean> collectionQuestion(@RequestBody @Validated UserStarBo userStarBo) {
         userStarBo.setUserId(getUserId());
         return CommonResult.autoResult(userStarService.collectionQuestion(userStarBo));
+    }
+
+    @ApiOperation(value = "收藏题目分页展示", notes = "分页展示用户已经收藏的题目")
+    @TokenRequired
+    @GetMapping("/starQuestions")
+    public CommonResult<Page<QuestionVo>> selectStarQuestions(
+            @RequestParam(name = "currentPage", required = false, defaultValue = "1") Integer currentPage,
+            @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
+        return CommonResult.operateSuccess(userStarService.getStarQuestion(getUserId(), currentPage, size));
     }
 }

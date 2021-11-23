@@ -45,20 +45,20 @@ public interface QuestionMapper extends BaseMapper<Question> {
     }
 
     /**
-     * 分页获取被收藏题目
+     * 获取被收藏题目
      *
      * @param userStarList 被收藏题目
-     * @param currentPage 当前页
-     * @param size 页大小
-     * @return Page<Question>
+     //* @param currentPage 当前页
+     //* @param size 页大小
+     * @return List<Question>
      */
-    default Page<Question> selectQuestions(List<UserStar> userStarList, Integer currentPage, Integer size){
+    default List<Question> selectStarQuestions(List<Long> userStarList){
         QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
                 .select(Question::getId, Question::getQuestion, Question::getQuestionOptions, Question::getPic,
                         Question::getQuestionType, Question::getMark, Question::getChapter, Question::getSubjectId,
                         Question::getRemark)
                 .in(Question::getId,userStarList);
-        return selectPage(new Page<>(currentPage, size), queryWrapper);
+        return selectList(queryWrapper);
     }
 }
