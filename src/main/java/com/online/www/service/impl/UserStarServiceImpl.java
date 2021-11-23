@@ -44,7 +44,7 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
                 .map(UserStar::getQuestionId).collect(Collectors.toList());
         List<Question> starQuestionList = questionMapper.selectBatchIds(starQuestionId);
         Page<QuestionVo> resultPage = new Page<>(currentPage, size);
-        resultPage.setTotal(userStarList.getSize());
+        resultPage.setTotal(userStarList.getTotal());
         List<QuestionVo> records = new ArrayList<>();
         if (!starQuestionList.isEmpty()) {
             records = starQuestionList.stream()
