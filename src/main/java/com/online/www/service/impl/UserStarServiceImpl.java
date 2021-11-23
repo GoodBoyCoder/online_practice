@@ -51,7 +51,6 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
                     .map(question -> new QuestionVo().convertStarFromQuestion(question))
                     .collect(Collectors.toList());
         }
-
         resultPage.setRecords(records);
         return resultPage;
     }
