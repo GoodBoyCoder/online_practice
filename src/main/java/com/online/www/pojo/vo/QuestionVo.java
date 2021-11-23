@@ -115,4 +115,10 @@ public class QuestionVo {
         return this;
     }
 
+    public QuestionVo convertStarFromQuestion(Question question){
+        convertFromQuestion(question);
+        this.setStared(true);
+        return this;
+    }
+
 }
