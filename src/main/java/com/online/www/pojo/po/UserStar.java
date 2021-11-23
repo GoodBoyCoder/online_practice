@@ -29,7 +29,7 @@ public class UserStar {
     private Long questionId;
 
     /**
-     * 题目ID
+     * 备注
      */
     @TableField("remark")
     private String remark;
