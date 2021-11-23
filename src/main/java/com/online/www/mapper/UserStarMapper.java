@@ -2,7 +2,9 @@ package com.online.www.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.online.www.pojo.bo.UserStarBo;
+import com.online.www.pojo.po.Question;
 import com.online.www.pojo.po.UserStar;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -49,14 +51,17 @@ public interface UserStarMapper extends BaseMapper<UserStar> {
      * 查询收藏题目集合
      *
      * @param userId 用户ID
+     * @param currentPage 当前页
+     * @param size 页大小
      * @return 收藏集合
      */
-    default List<UserStar> selectStarQuestionByUserId(Integer userId) {
+    default Page<UserStar> selectStarQuestionPageByUserId(Integer userId, Integer currentPage, Integer size) {
         QueryWrapper<UserStar> queryWrapper = new QueryWrapper<>();
+        Page<UserStar> resultPage = new Page<>(currentPage,size);
         queryWrapper.lambda()
                 .select(UserStar::getQuestionId, UserStar::getUserId)
                 .eq(UserStar::getUserId, userId);
-        return selectList(queryWrapper);
+        return selectPage(resultPage,queryWrapper);
     }
 
     /**
