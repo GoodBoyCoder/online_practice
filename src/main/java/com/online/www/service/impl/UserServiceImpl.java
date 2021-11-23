@@ -9,6 +9,7 @@ import com.online.www.pojo.bo.LoginBo;
 import com.online.www.pojo.bo.SignUpBo;
 import com.online.www.pojo.po.User;
 import com.online.www.pojo.vo.LoginVo;
+import com.online.www.pojo.vo.UserVo;
 import com.online.www.service.UserService;
 import com.online.www.util.JwtUtil;
 import com.online.www.util.MD5Util;
@@ -29,6 +30,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private JwtUtil jwtUtil;
     @Resource
     private SecurityProperties securityProperties;
+    @Resource
+    private UserMapper userMapper;
 
     @Override
     public LoginVo login(LoginBo loginBo) {
@@ -62,5 +65,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public Boolean checkUserName(String userName) {
         return baseMapper.getUser(userName) == null;
+    }
+
+    @Override
+    public UserVo getUserInfo(Integer userId) {
+        return new UserVo().convertFromUser(userMapper.selectById(userId));
     }
 }

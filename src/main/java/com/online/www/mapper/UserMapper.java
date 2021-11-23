@@ -17,6 +17,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper extends BaseMapper<User> {
     /**
      * 根据用户名查询
+     *
      * @param userName 用户名
      * @return 用户
      */
