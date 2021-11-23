@@ -1,17 +1,14 @@
 package com.online.www.mapper;
 
-import java.util.List;
-import java.util.Objects;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.online.www.pojo.bo.QuestionSelectBo;
 import com.online.www.pojo.po.Question;
-import com.online.www.pojo.po.UserStar;
-import com.online.www.pojo.vo.QuestionVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
