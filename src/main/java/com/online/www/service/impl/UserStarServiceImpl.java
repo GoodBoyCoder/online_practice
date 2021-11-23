@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Lenovo
@@ -47,12 +48,17 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
                 starQuestionId.add(us.getQuestionId());
             }
         }
-        List<Question> starQuestionList = questionMapper.selectStarQuestions(starQuestionId);
+        List<Question> starQuestionList = questionMapper.selectBatchIds(starQuestionId);
+
         Page<QuestionVo> resultPage = new Page<>(currentPage, size);
         resultPage.setTotal(starQuestionList.size());
+        List<Question> questionCollect = starQuestionList.stream()
+                .skip((long) size * (currentPage - 1))
+                .limit(size)
+                .collect(Collectors.toList());
         List<QuestionVo> records = new ArrayList<>();
-        if (!starQuestionList.isEmpty()) {
-            for (Question q : starQuestionList) {
+        if (!questionCollect.isEmpty()) {
+            for (Question q : questionCollect) {
                 records.add(new QuestionVo().convertFromQuestion(q));
             }
         }
