@@ -40,4 +40,22 @@ public interface QuestionMapper extends BaseMapper<Question> {
                 .notIn(!CollectionUtils.isEmpty(questionDoneList), Question::getId, questionDoneList);
         return selectList(queryWrapper);
     }
+
+    /**
+     * 查询同科目的所有同类型题
+     *
+     * @param subjectId    科目ID
+     * @param questionType 题目类型
+     * @return List<Question>
+     */
+    default List<Question> selectQuestionsBySubject(Integer subjectId, Integer questionType) {
+        QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .select(Question::getId, Question::getQuestion, Question::getQuestionOptions, Question::getPic,
+                        Question::getQuestionType, Question::getMark, Question::getChapter, Question::getSubjectId,
+                        Question::getRemark)
+                .eq(Question::getSubjectId, subjectId)
+                .eq(Question::getQuestionType, questionType);
+        return selectList(queryWrapper);
+    }
 }
