@@ -111,14 +111,4 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
         return questionJudgeVo;
     }
-
-    @Override
-    public List<QuestionJudgeVo> getQuestionJudgeList(List<QuestionJudgeBo> questionJudgeBoList, Integer userId) {
-        return questionJudgeBoList.stream()
-                .map(questionJudgeBo -> {
-                    questionJudgeBo.setUserId(userId);
-                    return this.getQuestionJudge(questionJudgeBo);
-                })
-                .collect(Collectors.toList());
-    }
 }
