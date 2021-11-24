@@ -9,6 +9,8 @@ import lombok.Data;
  */
 @Data
 public class QuestionJudgeVo {
+    @ApiModelProperty(value = "题目id")
+    private Long questionId;
     @ApiModelProperty(value = "答案")
     private String answer;
     @ApiModelProperty(value = "题解")
