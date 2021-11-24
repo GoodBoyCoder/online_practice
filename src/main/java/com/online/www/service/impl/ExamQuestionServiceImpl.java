@@ -68,7 +68,7 @@ public class ExamQuestionServiceImpl extends ServiceImpl<ExamQuestionMapper, Exa
                 .mapToDouble(questionJudgeDetailVo -> questionJudgeDetailVo.getQuestionVo().getMark())
                 .sum();
         // 更新
-        examUser.setPassQuestion(questionJudgeDetailVos.size());
+        examUser.setPassQuestion(passDetailVos.size());
         examUser.setTotalScore(totalScore);
         examUserMapper.updateById(examUser);
 
