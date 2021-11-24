@@ -42,6 +42,8 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     private UserStarMapper userStarMapper;
     @Resource
     private ExamQuestionMapper examQuestionMapper;
+    @Resource
+    private ExamUserMapper examUserMapper;
 
     @Override
     public ExamWithQuestionVo autoCreateExam(CreateExamBo createExamBo, Integer userId) {
@@ -72,7 +74,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     }
 
     @Override
-    public boolean saveExam(ExamCommitBo examCommitBo) {
+    public Exam saveExam(ExamCommitBo examCommitBo, Integer userId) {
         CreateExamBo createExamBo = examCommitBo.getCreateExamBo();
         List<QuestionJudgeBo> questionJudgeBoList = examCommitBo.getQuestionJudgeBoList();
         // 保存试卷
@@ -81,16 +83,19 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         exam.setCreatTime(LocalDateTime.now());
         baseMapper.insert(exam);
         // 保存试题
-        if (Objects.nonNull(exam.getId())) {
-            for (int i = 0; i < questionJudgeBoList.size(); i++) {
-                ExamQuestion examQuestion = new ExamQuestion();
-                examQuestion.setExamId(exam.getId());
-                examQuestion.setNumber(i + 1);
-                examQuestion.setQuestionId(questionJudgeBoList.get(i).getQuestionId());
-                examQuestionMapper.insert(examQuestion);
-            }
-            return true;
+        for (int i = 0; i < questionJudgeBoList.size(); i++) {
+            ExamQuestion examQuestion = new ExamQuestion();
+            examQuestion.setExamId(exam.getId());
+            examQuestion.setNumber(i + 1);
+            examQuestion.setQuestionId(questionJudgeBoList.get(i).getQuestionId());
+            examQuestionMapper.insert(examQuestion);
         }
-        return false;
+        // 保存考试用户关系
+        ExamUser examUser = new ExamUser();
+        examUser.setExamId(exam.getId());
+        examUser.setUserId(userId);
+        examUser.setTotalQuestion(questionJudgeBoList.size());
+        examUserMapper.insert(examUser);
+        return exam;
     }
 }

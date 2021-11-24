@@ -20,6 +20,9 @@ public class UserVo {
     private String pic;
 
     public UserVo convertFromUser(User user){
+        if (user == null){
+            return null;
+        }
         this.id = user.getId();
         this.userName = user.getUserName();
         this.pic = user.getPic();

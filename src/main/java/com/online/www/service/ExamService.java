@@ -30,7 +30,7 @@ public interface ExamService extends IService<Exam> {
     /**
      * 保存试卷信息
      * @param examCommitBo 试卷提交信息
-     * @return 是否保存成功
+     * @return 考试
      */
-    boolean saveExam(ExamCommitBo examCommitBo);
+    Exam saveExam(ExamCommitBo examCommitBo, Integer userId);
 }
