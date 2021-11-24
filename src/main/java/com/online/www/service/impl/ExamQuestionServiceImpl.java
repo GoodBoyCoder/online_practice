@@ -37,7 +37,7 @@ public class ExamQuestionServiceImpl extends ServiceImpl<ExamQuestionMapper, Exa
     private ExamUserMapper examUserMapper;
 
     @Override
-    public List<QuestionJudgeVo> examQuestionJudge(List<QuestionJudgeBo> questionJudgeBoList, Integer userId, Integer examId) {
+    public Double examQuestionJudge(List<QuestionJudgeBo> questionJudgeBoList, Integer userId, Integer examId) {
         ExamUser examUser = examUserMapper.selectByUserAndExam(userId, examId);
         Assert.notNull(examUser, "考试不存在");
         // 判题
@@ -72,9 +72,7 @@ public class ExamQuestionServiceImpl extends ServiceImpl<ExamQuestionMapper, Exa
         examUser.setTotalScore(totalScore);
         examUserMapper.updateById(examUser);
 
-        return questionJudgeDetailVos.stream()
-                .map(QuestionJudgeDetailVo::getQuestionJudgeVo)
-                .collect(Collectors.toList());
+        return totalScore;
     }
 
     private QuestionJudgeDetailVo getExamQuestionJudgeDetail(QuestionJudgeBo judgeBo) {

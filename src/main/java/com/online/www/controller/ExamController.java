@@ -46,7 +46,7 @@ public class ExamController extends BaseController {
     @ApiOperation(value = "考试判题")
     @TokenRequired
     @PostMapping("/examJudge")
-    public CommonResult<List<QuestionJudgeVo>> examJudge(@Validated @RequestBody ExamCommitBo examCommitBo) {
+    public CommonResult<Double> examJudge(@Validated @RequestBody ExamCommitBo examCommitBo) {
         // 保存考试信息
         Exam exam = examService.saveExam(examCommitBo, getUserId());
         // 判题并保存

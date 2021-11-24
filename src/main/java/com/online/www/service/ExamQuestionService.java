@@ -24,6 +24,6 @@ public interface ExamQuestionService extends IService<ExamQuestion> {
      * @param examId 考试ID
      * @return 判断结果列表
      */
-    List<QuestionJudgeVo> examQuestionJudge(List<QuestionJudgeBo> questionJudgeBoList, Integer userId, Integer examId);
+    Double examQuestionJudge(List<QuestionJudgeBo> questionJudgeBoList, Integer userId, Integer examId);
 
 }
