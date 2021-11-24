@@ -7,6 +7,7 @@ import com.online.www.constant.QuestionTypeConstant;
 import com.online.www.pojo.po.Question;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.util.StringUtils;
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.util.StringUtils;
  * @date 2021-11-20
  */
 @Data
+@Accessors(chain = true)
 public class QuestionVo {
     @ApiModelProperty(value = "题目ID")
     private Long id;
@@ -55,9 +57,9 @@ public class QuestionVo {
     private Double mark;
 
     /**
-     * 类型（0-单选 1-多选 2-判断）
+     * 类型（1-判断 2-单选 3-多选）
      */
-    @ApiModelProperty(value = "题目类型（0-单选 1-多选 2-判断）")
+    @ApiModelProperty(value = "题目类型（1-判断 2-单选 3-多选 ）")
     private Integer type;
 
     /**
@@ -83,6 +85,9 @@ public class QuestionVo {
      */
     @ApiModelProperty(value = "题目是否已经收藏（true-已经收藏）")
     private Boolean stared;
+
+    @ApiModelProperty(value = "我的答案")
+    private List<String> myAnswer;
 
 
     public QuestionVo convertFromQuestionWithNoAnswer(Question question) {
