@@ -42,6 +42,8 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     private UserStarMapper userStarMapper;
     @Resource
     private ExamQuestionMapper examQuestionMapper;
+    @Resource
+    private ExamUserMapper examUserMapper;
 
     @Override
     public ExamWithQuestionVo autoCreateExam(CreateExamBo createExamBo, Integer userId) {
@@ -93,6 +95,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         examUser.setExamId(exam.getId());
         examUser.setUserId(userId);
         examUser.setTotalQuestion(questionJudgeBoList.size());
+        examUserMapper.insert(examUser);
         return exam;
     }
 }
