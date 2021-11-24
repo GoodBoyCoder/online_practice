@@ -72,7 +72,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     }
 
     @Override
-    public Exam saveExam(ExamCommitBo examCommitBo) {
+    public Exam saveExam(ExamCommitBo examCommitBo, Integer userId) {
         CreateExamBo createExamBo = examCommitBo.getCreateExamBo();
         List<QuestionJudgeBo> questionJudgeBoList = examCommitBo.getQuestionJudgeBoList();
         // 保存试卷
@@ -88,6 +88,11 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
             examQuestion.setQuestionId(questionJudgeBoList.get(i).getQuestionId());
             examQuestionMapper.insert(examQuestion);
         }
+        // 保存考试用户关系
+        ExamUser examUser = new ExamUser();
+        examUser.setExamId(exam.getId());
+        examUser.setUserId(userId);
+        examUser.setTotalQuestion(questionJudgeBoList.size());
         return exam;
     }
 }

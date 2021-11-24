@@ -32,5 +32,5 @@ public interface ExamService extends IService<Exam> {
      * @param examCommitBo 试卷提交信息
      * @return 考试
      */
-    Exam saveExam(ExamCommitBo examCommitBo);
+    Exam saveExam(ExamCommitBo examCommitBo, Integer userId);
 }
