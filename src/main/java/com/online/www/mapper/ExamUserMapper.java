@@ -27,7 +27,7 @@ public interface ExamUserMapper extends BaseMapper<ExamUser> {
     default ExamUser selectByUserAndExam(Integer userId, Integer examId) {
         QueryWrapper<ExamUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-                .select(ExamUser::getId, ExamUser::getExamId, ExamUser::getUserId, ExamUser::getTotalQuestion)
+                .select(ExamUser::getId, ExamUser::getExamId, ExamUser::getUserId, ExamUser::getPassQuestion)
                 .eq(Objects.nonNull(userId), ExamUser::getUserId, userId)
                 .eq(Objects.nonNull(examId), ExamUser::getExamId, examId);
         return selectOne(queryWrapper);
