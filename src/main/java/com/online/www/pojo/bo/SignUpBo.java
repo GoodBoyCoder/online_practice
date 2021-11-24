@@ -19,7 +19,7 @@ public class SignUpBo {
     @ApiModelProperty(value = "密码", required = true, example = "password",
             notes = "密码至少包含一个数字，一个大写字母，一个小写，一个特殊字符，长度在6~18之间")
     @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,18}$",
-            message = "密码至少包含一个数字，一个大写字母，一个小写，一个特殊字符，长度在6~18之间")
+            message = "密码至少包含一个数字，一个大写字母，一个小写，一个特殊字符(#?!@$%^&*-)，长度在6~18之间")
     private String password;
 
     @ApiModelProperty(value = "头像URL地址")

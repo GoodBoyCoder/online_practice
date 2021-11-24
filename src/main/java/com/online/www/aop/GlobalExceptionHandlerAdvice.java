@@ -56,14 +56,14 @@ public class GlobalExceptionHandlerAdvice {
     public CommonResult<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         log.error("MethodArgumentNotValidException", ex);
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-        Optional<String> errors = fieldErrors.stream().map(FieldError::toString).reduce((a, b) -> a + " \n" + b);
+        Optional<String> errors = fieldErrors.stream().map(FieldError::getDefaultMessage).reduce((a, b) -> a + " \n" + b);
         return CommonResult.operateFailWithMessage(errors.orElse("参数错误"));
     }
 
     @ExceptionHandler(ValidationException.class)
     @ResponseBody
     public CommonResult<Void> handleValidationException(ValidationException ex) {
-        log.error("MethodArgumentNotValidException", ex);
+        log.error("ValidationException", ex);
         return CommonResult.operateFailWithMessage(ex.getCause().getMessage());
     }
 
@@ -90,7 +90,7 @@ public class GlobalExceptionHandlerAdvice {
 
     @ExceptionHandler(AuthException.class)
     @ResponseBody
-    public CommonResult<Void> handleDuplicateKeyException(AuthException ex) {
+    public CommonResult<Void> handleAuthException(AuthException ex) {
         log.error("AuthException", ex);
         return new CommonResult<>(ResultConstant.UNAUTHORIZED_CODE, ex.getMessage(), false);
     }
