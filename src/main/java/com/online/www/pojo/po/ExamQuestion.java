@@ -27,14 +27,14 @@ public class ExamQuestion implements Serializable {
     /**
      * 试卷ID
      */
-    @TableId(value = "exam_id", type = IdType.AUTO)
+    @TableField("exam_id")
     private Integer examId;
 
     /**
      * 题目ID
      */
     @TableField("question_id")
-    private Integer questionId;
+    private Long questionId;
 
     /**
      * 题目顺序（题号）

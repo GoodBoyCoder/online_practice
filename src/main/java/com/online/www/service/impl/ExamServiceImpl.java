@@ -2,26 +2,25 @@ package com.online.www.service.impl;
 
 import javax.annotation.Resource;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.online.www.mapper.ExamMapper;
-import com.online.www.mapper.QuestionMapper;
-import com.online.www.mapper.SubjectMapper;
-import com.online.www.mapper.UserStarMapper;
+import com.online.www.mapper.*;
 import com.online.www.pojo.bo.CreateExamBo;
-import com.online.www.pojo.po.Exam;
-import com.online.www.pojo.po.Question;
-import com.online.www.pojo.po.Subject;
-import com.online.www.pojo.po.UserStar;
+import com.online.www.pojo.bo.ExamCommitBo;
+import com.online.www.pojo.bo.QuestionJudgeBo;
+import com.online.www.pojo.po.*;
 import com.online.www.pojo.vo.ExamWithQuestionVo;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.service.ExamService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -41,6 +40,8 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     private QuestionMapper questionMapper;
     @Resource
     private UserStarMapper userStarMapper;
+    @Resource
+    private ExamQuestionMapper examQuestionMapper;
 
     @Override
     public ExamWithQuestionVo autoCreateExam(CreateExamBo createExamBo, Integer userId) {
@@ -68,5 +69,25 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         Map<Long, UserStar> userStarMap = userStars.stream().collect(Collectors.toMap(UserStar::getQuestionId, Function.identity()));
         collect.forEach(record -> record.setStared(null != userStarMap.get(record.getId())));
         return examWithQuestionVo;
+    }
+
+    @Override
+    public Exam saveExam(ExamCommitBo examCommitBo) {
+        CreateExamBo createExamBo = examCommitBo.getCreateExamBo();
+        List<QuestionJudgeBo> questionJudgeBoList = examCommitBo.getQuestionJudgeBoList();
+        // 保存试卷
+        Exam exam = new Exam();
+        BeanUtils.copyProperties(createExamBo, exam);
+        exam.setCreatTime(LocalDateTime.now());
+        baseMapper.insert(exam);
+        // 保存试题
+        for (int i = 0; i < questionJudgeBoList.size(); i++) {
+            ExamQuestion examQuestion = new ExamQuestion();
+            examQuestion.setExamId(exam.getId());
+            examQuestion.setNumber(i + 1);
+            examQuestion.setQuestionId(questionJudgeBoList.get(i).getQuestionId());
+            examQuestionMapper.insert(examQuestion);
+        }
+        return exam;
     }
 }
