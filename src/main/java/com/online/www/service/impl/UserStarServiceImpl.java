@@ -40,18 +40,24 @@ public class UserStarServiceImpl extends ServiceImpl<UserStarMapper, UserStar> i
     @Override
     public Page<QuestionVo> getStarQuestion(Integer userId, Integer currentPage, Integer size) {
         Page<UserStar> userStarList = userStarMapper.selectStarQuestionPageByUserId(userId, currentPage, size);
-        List<Long> starQuestionId = userStarList.getRecords().stream()
-                .map(UserStar::getQuestionId).collect(Collectors.toList());
-        List<Question> starQuestionList = questionMapper.selectBatchIds(starQuestionId);
         Page<QuestionVo> resultPage = new Page<>(currentPage, size);
         resultPage.setTotal(userStarList.getTotal());
         List<QuestionVo> records = new ArrayList<>();
-        if (!starQuestionList.isEmpty()) {
-            records = starQuestionList.stream()
-                    .map(question -> new QuestionVo().convertStarFromQuestion(question))
-                    .collect(Collectors.toList());
-        }
         resultPage.setRecords(records);
+
+        List<Long> starQuestionId = userStarList.getRecords().stream()
+                .map(UserStar::getQuestionId).collect(Collectors.toList());
+        if (starQuestionId.isEmpty()) {
+            return resultPage;
+        }
+        List<Question> starQuestionList = questionMapper.selectBatchIds(starQuestionId);
+        if (!starQuestionList.isEmpty()) {
+            records.addAll(
+                    starQuestionList.stream()
+                            .map(question -> new QuestionVo().convertStarFromQuestion(question))
+                            .collect(Collectors.toList()));
+        }
+
         return resultPage;
     }
 
