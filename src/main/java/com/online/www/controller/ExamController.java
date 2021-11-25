@@ -7,12 +7,14 @@ import com.online.www.annotation.TokenRequired;
 import com.online.www.pojo.bo.CreateExamBo;
 import com.online.www.pojo.bo.ExamCommitBo;
 import com.online.www.pojo.po.Exam;
+import com.online.www.pojo.vo.ExamVo;
 import com.online.www.pojo.vo.ExamWithQuestionVo;
 import com.online.www.pojo.vo.QuestionJudgeVo;
 import com.online.www.result.CommonResult;
 import com.online.www.service.ExamQuestionService;
 import com.online.www.service.ExamService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +53,13 @@ public class ExamController extends BaseController {
         Exam exam = examService.saveExam(examCommitBo, getUserId());
         // 判题并保存
         return CommonResult.operateSuccess(examQuestionService.examQuestionJudge(examCommitBo.getQuestionJudgeBoList(), getUserId(), exam.getId()));
+    }
+
+    @ApiModelProperty(value = "历史考试列表")
+    @TokenRequired
+    @GetMapping("/getHistory")
+    public CommonResult<List<ExamVo>> getHistoryExams() {
+        return CommonResult.operateSuccess(examService.getHistoryExams(getUserId()));
     }
 }
 
