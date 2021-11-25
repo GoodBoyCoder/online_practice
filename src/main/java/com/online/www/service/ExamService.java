@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.online.www.pojo.bo.CreateExamBo;
 import com.online.www.pojo.bo.ExamCommitBo;
 import com.online.www.pojo.po.Exam;
+import com.online.www.pojo.vo.ExamVo;
 import com.online.www.pojo.vo.ExamWithQuestionVo;
 import com.online.www.pojo.vo.QuestionJudgeVo;
 
@@ -33,4 +34,11 @@ public interface ExamService extends IService<Exam> {
      * @return 考试
      */
     Exam saveExam(ExamCommitBo examCommitBo, Integer userId);
+
+    /**
+     * 获取历史考试
+     * @param userId 用户ID
+     * @return 历史考试列表
+     */
+    List<ExamVo> getHistoryExams(Integer userId);
 }

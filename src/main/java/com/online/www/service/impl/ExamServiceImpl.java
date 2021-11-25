@@ -3,10 +3,7 @@ package com.online.www.service.impl;
 import javax.annotation.Resource;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -17,6 +14,7 @@ import com.online.www.pojo.bo.CreateExamBo;
 import com.online.www.pojo.bo.ExamCommitBo;
 import com.online.www.pojo.bo.QuestionJudgeBo;
 import com.online.www.pojo.po.*;
+import com.online.www.pojo.vo.ExamVo;
 import com.online.www.pojo.vo.ExamWithQuestionVo;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.service.ExamService;
@@ -97,5 +95,21 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         examUser.setTotalQuestion(questionJudgeBoList.size());
         examUserMapper.insert(examUser);
         return exam;
+    }
+
+    @Override
+    public List<ExamVo> getHistoryExams(Integer userId) {
+        // 考试-用户关系
+        List<ExamUser> examUsers = examUserMapper.selectByUser(userId);
+
+        return examUsers.stream()
+                .map(examUser -> {
+                    Exam exam = baseMapper.selectById(examUser.getExamId());
+                    Subject subject = subjectMapper.selectById(exam.getSubjectId());
+                    return new ExamVo(exam, examUser, subject.getSubjectName());
+                })
+                // 按时间降序
+                .sorted(Comparator.comparing(ExamVo::getStartTime).reversed())
+                .collect(Collectors.toList());
     }
 }
