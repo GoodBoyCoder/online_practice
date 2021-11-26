@@ -49,4 +49,18 @@ public interface ExamUserMapper extends BaseMapper<ExamUser> {
                 .eq(Objects.nonNull(userId), ExamUser::getUserId, userId);
         return selectList(queryWrapper);
     }
+
+    /**
+     * 根据用户id查询用户考试情况
+     *
+     * @param userId 用户id
+     * @return 用户考试情况集合
+     */
+    default List<ExamUser> selectByUserId(Integer userId) {
+        QueryWrapper<ExamUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .select(ExamUser::getId, ExamUser::getExamId, ExamUser::getTotalScore)
+                .eq(ExamUser::getUserId, userId);
+        return selectList(queryWrapper);
+    }
 }

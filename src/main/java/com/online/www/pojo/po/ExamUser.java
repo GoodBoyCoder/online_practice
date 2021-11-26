@@ -1,6 +1,7 @@
 package com.online.www.pojo.po;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -57,4 +58,17 @@ public class ExamUser implements Serializable {
     @TableField("total_score")
     private Double totalScore;
 
+    /**
+     * 判断是否及格（及格线是60）
+     *
+     * @return true-及格；false-不及格
+     */
+    public Boolean isPassing() {
+        if (Objects.isNull(totalScore)) {
+            return false;
+        } else {
+            // 及格线固定是90
+            return this.totalScore.compareTo(90D) >= 0;
+        }
+    }
 }
