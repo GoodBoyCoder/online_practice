@@ -9,6 +9,7 @@ import com.online.www.pojo.vo.QuestionJudgeVo;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.service.ExamQuestionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -37,21 +38,24 @@ public class ExamQuestionServiceImpl extends ServiceImpl<ExamQuestionMapper, Exa
     private ExamUserMapper examUserMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Double examQuestionJudge(List<QuestionJudgeBo> questionJudgeBoList, Integer userId, Integer examId) {
         ExamUser examUser = examUserMapper.selectByUserAndExam(userId, examId);
         Assert.notNull(examUser, "考试不存在");
         // 判题
         List<QuestionJudgeDetailVo> questionJudgeDetailVos = questionJudgeBoList.stream()
+                .filter(questionJudgeBo -> !CollectionUtils.isEmpty(questionJudgeBo.getAnswerList()))
                 .map(questionJudgeBo -> {
                     questionJudgeBo.setUserId(userId);
                     QuestionJudgeDetailVo examQuestionJudgeDetail = this.getExamQuestionJudgeDetail(questionJudgeBo);
                     QuestionVo questionVo = examQuestionJudgeDetail.getQuestionVo();
                     QuestionJudgeVo questionJudgeVo = examQuestionJudgeDetail.getQuestionJudgeVo();
+
                     // 保存结果
                     UserQuestion userQuestion = new UserQuestion();
                     userQuestion.setQuestionId(questionVo.getId());
                     userQuestion.setUserId(userId);
-                    userQuestion.setAnswer(questionJudgeVo.getAnswer());
+                    userQuestion.setAnswer(questionJudgeVo.getMyAnswer());
                     userQuestion.setCompleteTrue(questionJudgeVo.getCorrect());
                     userQuestion.setModifyTime(LocalDateTime.now());
                     userQuestion.setJudgeExamId(examUser.getId());
@@ -95,6 +99,7 @@ public class ExamQuestionServiceImpl extends ServiceImpl<ExamQuestionMapper, Exa
                     .map(an -> an.substring(0, 1))
                     .collect(Collectors.joining());
             questionJudgeVo.setCorrect(question.getStrategy().judge(question.getAnswer(), reply));
+            questionJudgeVo.setMyAnswer(reply);
         }
         return new QuestionJudgeDetailVo(new QuestionVo().convertFromQuestion(question), questionJudgeVo);
     }

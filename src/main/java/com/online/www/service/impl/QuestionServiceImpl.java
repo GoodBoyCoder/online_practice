@@ -90,6 +90,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     .map(an -> an.substring(0, 1))
                     .collect(Collectors.joining());
             questionJudgeVo.setCorrect(question.getStrategy().judge(question.getAnswer(), reply));
+            questionJudgeVo.setMyAnswer(reply);
 
             //保存做题记录
             UserQuestion userQuestion = userQuestionMapper.selectByUserAndQuestion(judgeBo.getUserId(), judgeBo.getQuestionId());

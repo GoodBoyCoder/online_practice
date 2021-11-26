@@ -17,4 +17,7 @@ public class QuestionJudgeVo {
     private String explain;
     @ApiModelProperty(value = "是否正确")
     private Boolean correct;
+
+    @ApiModelProperty(hidden = true)
+    private String myAnswer;
 }
