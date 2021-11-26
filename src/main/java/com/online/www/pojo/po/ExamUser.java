@@ -67,8 +67,8 @@ public class ExamUser implements Serializable {
         if (Objects.isNull(totalScore)) {
             return false;
         } else {
-            // 及格线固定是60
-            return this.totalScore.compareTo(60D) >= 0;
+            // 及格线固定是90
+            return this.totalScore.compareTo(90D) >= 0;
         }
     }
 }
