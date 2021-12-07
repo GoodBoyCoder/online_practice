@@ -104,6 +104,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(User::getId, Function.identity()));
 
         ExamRankVo examRankVo = new ExamRankVo();
+        examRankVo.setMyRank(-1);
         //转换examRankPage
         int rank = 1;
         List<ExamRankPage> examRankPages = new LinkedList<>();
