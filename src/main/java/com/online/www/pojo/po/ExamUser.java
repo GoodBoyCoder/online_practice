@@ -59,6 +59,12 @@ public class ExamUser implements Serializable {
     private Double totalScore;
 
     /**
+     * 考试时间(分钟)
+     */
+    @TableField("pass_time")
+    private Integer passTime;
+
+    /**
      * 判断是否及格（及格线是60）
      *
      * @return true-及格；false-不及格

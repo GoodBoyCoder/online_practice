@@ -2,6 +2,7 @@ package com.online.www.service.impl;
 
 import javax.annotation.Resource;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -93,6 +94,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         examUser.setExamId(exam.getId());
         examUser.setUserId(userId);
         examUser.setTotalQuestion(questionJudgeBoList.size());
+        examUser.setPassTime((int) Duration.between(LocalDateTime.now(), exam.getStartTime()).toMinutes());
         examUserMapper.insert(examUser);
         return exam;
     }
