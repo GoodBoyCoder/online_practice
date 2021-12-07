@@ -59,7 +59,7 @@ public class ExamUser implements Serializable {
     private Double totalScore;
 
     /**
-     * 考试时间(分钟)
+     * 考试时间(秒)
      */
     @TableField("pass_time")
     private Integer passTime;
