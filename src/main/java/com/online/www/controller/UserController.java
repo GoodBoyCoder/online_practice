@@ -65,7 +65,7 @@ public class UserController extends BaseController {
         return CommonResult.operateSuccess(userService.getUserInfo(getUserId()));
     }
 
-    @ApiOperation(value = "获取考试排名信息")
+    @ApiOperation(value = "获取考试排行榜")
     @TokenRequired
     @GetMapping("/getExamRank")
     public CommonResult<ExamRankVo> getExamRank(@RequestParam(value = "subjectId")
