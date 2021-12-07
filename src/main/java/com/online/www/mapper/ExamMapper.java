@@ -31,4 +31,18 @@ public interface ExamMapper extends BaseMapper<Exam> {
                 .in(Exam::getId, examIdList);
         return selectList(queryWrapper);
     }
+
+    /**
+     * 获取同科目的考试
+     *
+     * @param subjectId 科目ID
+     * @return 考试集合
+     */
+    default List<Exam> selectWithSubjectList(Integer subjectId) {
+        QueryWrapper<Exam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .select(Exam::getId)
+                .eq(Exam::getSubjectId, subjectId);
+        return selectList(queryWrapper);
+    }
 }

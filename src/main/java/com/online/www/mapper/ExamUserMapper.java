@@ -1,12 +1,12 @@
 package com.online.www.mapper;
 
+import java.util.List;
+import java.util.Objects;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.online.www.pojo.po.ExamUser;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * <p>
@@ -21,6 +21,7 @@ public interface ExamUserMapper extends BaseMapper<ExamUser> {
 
     /**
      * 通过用户、考试查询
+     *
      * @param userId 用户ID
      * @param examId 考试ID
      * @return 考试-用户关系
@@ -36,6 +37,7 @@ public interface ExamUserMapper extends BaseMapper<ExamUser> {
 
     /**
      * 通过用户查询
+     *
      * @param userId 用户ID
      * @return 考试-用户关系列表
      */
@@ -61,6 +63,21 @@ public interface ExamUserMapper extends BaseMapper<ExamUser> {
         queryWrapper.lambda()
                 .select(ExamUser::getId, ExamUser::getExamId, ExamUser::getTotalScore)
                 .eq(ExamUser::getUserId, userId);
+        return selectList(queryWrapper);
+    }
+
+    /**
+     * 获取同个科目的考试记录
+     *
+     * @param examIdList 科目相关考试
+     * @return 前N集合
+     */
+    default List<ExamUser> getExamUserInExamId(List<Integer> examIdList) {
+        QueryWrapper<ExamUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .select(ExamUser::getId, ExamUser::getExamId, ExamUser::getUserId, ExamUser::getTotalScore,
+                        ExamUser::getPassTime)
+                .in(ExamUser::getExamId, examIdList);
         return selectList(queryWrapper);
     }
 }

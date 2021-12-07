@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.online.www.pojo.bo.LoginBo;
 import com.online.www.pojo.bo.SignUpBo;
 import com.online.www.pojo.po.User;
+import com.online.www.pojo.vo.ExamRankVo;
 import com.online.www.pojo.vo.LoginVo;
 import com.online.www.pojo.vo.UserVo;
 
@@ -48,4 +49,12 @@ public interface UserService extends IService<User> {
      */
     UserVo getUserInfo(Integer userId);
 
+    /**
+     * 获取考试排名信息
+     *
+     * @param userId    用户ID
+     * @param subjectId 科目ID
+     * @return ExamRankVo
+     */
+    ExamRankVo getExamRank(Integer userId, Integer subjectId);
 }

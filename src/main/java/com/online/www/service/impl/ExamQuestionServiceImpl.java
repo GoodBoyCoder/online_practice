@@ -8,6 +8,7 @@ import com.online.www.pojo.vo.QuestionJudgeDetailVo;
 import com.online.www.pojo.vo.QuestionJudgeVo;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.service.ExamQuestionService;
+import com.online.www.service.RankService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -36,6 +37,10 @@ public class ExamQuestionServiceImpl extends ServiceImpl<ExamQuestionMapper, Exa
     private UserQuestionMapper userQuestionMapper;
     @Resource
     private ExamUserMapper examUserMapper;
+    @Resource
+    private ExamMapper examMapper;
+    @Resource
+    private RankService rankService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -76,6 +81,9 @@ public class ExamQuestionServiceImpl extends ServiceImpl<ExamQuestionMapper, Exa
         examUser.setTotalScore(totalScore);
         examUserMapper.updateById(examUser);
 
+        //刷新排名缓存
+        Exam exam = examMapper.selectById(examId);
+        rankService.refreshExamRank(exam.getSubjectId(), examUser);
         return totalScore;
     }
 

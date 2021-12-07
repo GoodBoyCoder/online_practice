@@ -3,10 +3,12 @@ package com.online.www.controller;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.online.www.annotation.TokenRequired;
 import com.online.www.pojo.bo.LoginBo;
 import com.online.www.pojo.bo.SignUpBo;
+import com.online.www.pojo.vo.ExamRankVo;
 import com.online.www.pojo.vo.LoginVo;
 import com.online.www.pojo.vo.UserVo;
 import com.online.www.result.CommonResult;
@@ -63,5 +65,12 @@ public class UserController extends BaseController {
         return CommonResult.operateSuccess(userService.getUserInfo(getUserId()));
     }
 
+    @ApiOperation(value = "获取考试排名信息")
+    @TokenRequired
+    @GetMapping("/getExamRank")
+    public CommonResult<ExamRankVo> getExamRank(@RequestParam(value = "subjectId")
+                                                    @NotNull(message = "科目ID需要非空") Integer subjectId) {
+        return CommonResult.operateSuccess(userService.getExamRank(getUserId(), subjectId));
+    }
 }
 
