@@ -23,4 +23,6 @@ public class ExamRankPage {
     private Integer userId;
     @ApiModelProperty(value = "用户名")
     private String userName;
+    @ApiModelProperty(value = "头像")
+    private String pic;
 }
