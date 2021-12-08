@@ -109,12 +109,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         int rank = 1;
         List<ExamRankPage> examRankPages = new LinkedList<>();
         for (ExamUser examUser : examRankList) {
+            User user = userMap.get(examUser.getUserId());
             ExamRankPage examRankPage = new ExamRankPage();
             examRankPage.setRank(rank++);
             examRankPage.setScore(examUser.getTotalScore());
             examRankPage.setPassTime(examUser.getPassTime());
             examRankPage.setUserId(examUser.getUserId());
-            examRankPage.setUserName(userMap.get(examUser.getUserId()).getUserName());
+            examRankPage.setUserName(user.getUserName());
+            examRankPage.setPic(user.getPic());
             examRankPages.add(examRankPage);
 
             if (userId.equals(examUser.getUserId())) {

@@ -1,18 +1,7 @@
 package com.online.www.service.impl;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.online.www.constant.QuestionTypeConstant;
 import com.online.www.mapper.QuestionMapper;
 import com.online.www.mapper.UserQuestionMapper;
 import com.online.www.mapper.UserStarMapper;
@@ -23,6 +12,11 @@ import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.service.UserQuestionService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import javax.annotation.Resource;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author GoodBoyCoder
