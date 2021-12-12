@@ -2,12 +2,7 @@ package com.online.www.service.impl;
 
 import javax.annotation.Resource;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -107,9 +102,9 @@ public class UserQuestionServiceImpl extends ServiceImpl<UserQuestionMapper, Use
     @Override
     public List<AnalysisVo> userQuestionAnalysis(Integer userId) {
         List<AnalysisVo> analysisVos = new ArrayList<>(2);
-        //查出所有做题数据
+        // 查出所有做题数据
         List<UserQuestion> userQuestions = userQuestionMapper.selectByUser(userId);
-        //查询所有科目
+        // 查询所有科目
         List<Subject> subjects = subjectMapper.selectAll();
         // 没有数据，提前结束
         if (userQuestions.size() <= 0) {
@@ -118,30 +113,36 @@ public class UserQuestionServiceImpl extends ServiceImpl<UserQuestionMapper, Use
             }
             return analysisVos;
         }
-        //根据题目Id分类
+        // 根据题目Id分类
         Map<Long, List<UserQuestion>> userQuestionMap = userQuestions.stream().collect(Collectors.groupingBy(UserQuestion::getQuestionId));
-        //查出相关题目
+        // 查出相关题目
         List<Question> questions = questionMapper.selectByIds(new ArrayList<>(userQuestionMap.keySet()));
-        //根据科目分类
+        // 根据科目分类
         Map<Integer, List<Question>> subQuestionMap = questions.stream().collect(Collectors.groupingBy(Question::getSubjectId));
+
         for (Subject subject : subjects) {
-            // 完成总题数
-            List<Question> questionList = subQuestionMap.getOrDefault(subject.getId(), new ArrayList<>());
-            int doneCount = questionList.size();
-            //总正确率
-            double allPassRate = getPassRate(questionList, userQuestionMap);
-            //按题型分类
+            List<Question> questionList = subQuestionMap.getOrDefault(subject.getId(), Collections.emptyList());
+
+            // 总正确率, 总通过题数, 总错误题数, 总题数
+            Map<String, Number> totalCountMap = countUserQuestions(questionList, userQuestionMap);
+
+            // 按题型分类
             Map<Object, List<Question>> questionTypeMap = questionList.stream().collect(Collectors.groupingBy(Question::getQuestionType));
-            //判断题正确率
-            List<Question> judgeQuestions = questionTypeMap.getOrDefault(QuestionTypeConstant.JUDGE, new ArrayList<>());
-            double judgePassRate = getPassRate(judgeQuestions, userQuestionMap);
-            //单选题正确率
-            List<Question> singleQuestions = questionTypeMap.getOrDefault(QuestionTypeConstant.SINGLE, new ArrayList<>());
-            double singlePassRate = getPassRate(singleQuestions, userQuestionMap);
-            //多选题正确率
-            List<Question> multipleQuestions = questionTypeMap.getOrDefault(QuestionTypeConstant.MULTIPLE, new ArrayList<>());
-            double multiplePassRate = getPassRate(multipleQuestions, userQuestionMap);
-            //根据不同科目预测通过率
+
+            // 判断题正确率, 判断题通过题数, 判断题错误题数, 判断题题数
+            List<Question> judgeQuestions = questionTypeMap.getOrDefault(QuestionTypeConstant.JUDGE, Collections.emptyList());
+            Map<String, Number> judgeCountMap = countUserQuestions(judgeQuestions, userQuestionMap);
+            double judgePassRate = (double) judgeCountMap.get("rate");
+            // 单选题正确率, 单选题通过题数, 单选题错误题数, 单选题题数
+            List<Question> singleQuestions = questionTypeMap.getOrDefault(QuestionTypeConstant.SINGLE, Collections.emptyList());
+            Map<String, Number> singleCountMap = countUserQuestions(singleQuestions, userQuestionMap);
+            double singlePassRate = (double) singleCountMap.get("rate");
+            // 多选题正确率, 多选题通过题数, 多选题错误题数, 多选题题数
+            List<Question> multipleQuestions = questionTypeMap.getOrDefault(QuestionTypeConstant.MULTIPLE, Collections.emptyList());
+            Map<String, Number> multipleCountMap = countUserQuestions(multipleQuestions, userQuestionMap);
+            double multiplePassRate = (double) multipleCountMap.get("rate");
+
+            // 根据不同科目预测通过率
             AnalysisStrategy analysisStrategy;
             switch (subject.getId()) {
                 case SubjectIdConstant.SUBJECT_ONE:
@@ -154,29 +155,61 @@ public class UserQuestionServiceImpl extends ServiceImpl<UserQuestionMapper, Use
                     throw new RuntimeException("无策略可用！");
             }
             double rate = analysisStrategy.analysis(judgePassRate, singlePassRate, multiplePassRate);
-            AnalysisVo analysisVo = new AnalysisVo();
-            analysisVo.setSubjectId(subject.getId());
-            analysisVo.setSubjectName(subject.getSubjectName());
-            analysisVo.setRate(rate);
-            analysisVo.setQuestionCount(doneCount);
-            analysisVo.setPassRate(allPassRate);
-            analysisVo.setJudgmentPassRate(judgePassRate);
-            analysisVo.setSingleChoicePassRate(singlePassRate);
-            analysisVo.setMultipleChoicePassRate(multiplePassRate);
+
+            AnalysisVo analysisVo = AnalysisVo.getInstance()
+                    .setSubjectId(subject.getId())
+                    .setSubjectName(subject.getSubjectName())
+                    .setRate(rate)
+
+                    .setTotalPassRate((double) totalCountMap.get("rate"))
+                    .setTotalCount((int) totalCountMap.get("totalCount"))
+                    .setTotalPassCount((int) totalCountMap.get("passCount"))
+                    .setTotalErrorCount((int) totalCountMap.get("errorCount"))
+
+                    .setJudgePassRate((double) judgeCountMap.get("rate"))
+                    .setJudgeTotalCount((int) judgeCountMap.get("totalCount"))
+                    .setJudgePassCount((int) judgeCountMap.get("passCount"))
+                    .setJudgeErrorCount((int) judgeCountMap.get("errorCount"))
+
+                    .setSinglePassRate((double) singleCountMap.get("rate"))
+                    .setSingleTotalCount((int) singleCountMap.get("totalCount"))
+                    .setSinglePassCount((int) singleCountMap.get("passCount"))
+                    .setSingleErrorCount((int) singleCountMap.get("errorCount"))
+
+                    .setMultiplePassRate((double) multipleCountMap.get("rate"))
+                    .setMultipleTotalCount((int) multipleCountMap.get("totalCount"))
+                    .setMultiplePassCount((int) multipleCountMap.get("passCount"))
+                    .setMultipleErrorCount((int) multipleCountMap.get("errorCount"));
+
             analysisVos.add(analysisVo);
         }
         return analysisVos;
     }
 
-    private double getPassRate(List<Question> questions, Map<Long, List<UserQuestion>> userQuestionMap) {
-        int passCount = 0, allCount = 0;
+    /**
+     * 计算通过数，错误数，总数，通过率
+     * @param questions 题目
+     * @param userQuestionMap 题目对应做题集
+     * @return 计算集Map
+     */
+    private Map<String, Number> countUserQuestions(List<Question> questions, Map<Long, List<UserQuestion>> userQuestionMap) {
+        int passCount = 0, totalCount = 0;
         for (Question question : questions) {
             List<UserQuestion> userQuestionList = userQuestionMap.get(question.getId());
-            allCount += userQuestionList.size();
+            totalCount += userQuestionList.size();
             passCount += (int) userQuestionList.stream().filter(UserQuestion::getCompleteTrue).count();
         }
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
         numberFormat.setMaximumFractionDigits(2);
-        return allCount == 0 ? 0 : Double.parseDouble(numberFormat.format(passCount * 1.0 / allCount));
+        double rate = (totalCount == 0)
+                ? 0
+                : Double.parseDouble(numberFormat.format(passCount * 1.0 / totalCount));
+        Map<String, Number> map = new HashMap<>(3);
+
+        map.put("passCount", passCount);
+        map.put("errorCount", totalCount - passCount);
+        map.put("totalCount", totalCount);
+        map.put("rate", rate);
+        return map;
     }
 }
