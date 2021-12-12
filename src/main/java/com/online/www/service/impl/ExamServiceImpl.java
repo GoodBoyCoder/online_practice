@@ -94,7 +94,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         examUser.setExamId(exam.getId());
         examUser.setUserId(userId);
         examUser.setTotalQuestion(questionJudgeBoList.size());
-        examUser.setPassTime((int) Duration.between(LocalDateTime.now(), exam.getStartTime()).getSeconds());
+        examUser.setPassTime((int) Duration.between(exam.getStartTime(), LocalDateTime.now()).getSeconds());
         examUserMapper.insert(examUser);
         return exam;
     }

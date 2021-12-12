@@ -2,12 +2,14 @@ package com.online.www.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.online.www.mapper.*;
+import com.online.www.pojo.bo.ExamCommitBo;
 import com.online.www.pojo.bo.QuestionJudgeBo;
 import com.online.www.pojo.po.*;
 import com.online.www.pojo.vo.QuestionJudgeDetailVo;
 import com.online.www.pojo.vo.QuestionJudgeVo;
 import com.online.www.pojo.vo.QuestionVo;
 import com.online.www.service.ExamQuestionService;
+import com.online.www.service.ExamService;
 import com.online.www.service.RankService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,10 +43,17 @@ public class ExamQuestionServiceImpl extends ServiceImpl<ExamQuestionMapper, Exa
     private ExamMapper examMapper;
     @Resource
     private RankService rankService;
+    @Resource
+    private ExamService examService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Double examQuestionJudge(List<QuestionJudgeBo> questionJudgeBoList, Integer userId, Integer examId) {
+    public Double examQuestionJudge(ExamCommitBo examCommitBo, Integer userId) {
+        // 保存考试信息
+        Exam exam = examService.saveExam(examCommitBo, userId);
+        Integer examId = exam.getId();
+        List<QuestionJudgeBo> questionJudgeBoList = examCommitBo.getQuestionJudgeBoList();
+
         ExamUser examUser = examUserMapper.selectByUserAndExam(userId, examId);
         Assert.notNull(examUser, "考试不存在");
         // 判题
@@ -82,8 +91,8 @@ public class ExamQuestionServiceImpl extends ServiceImpl<ExamQuestionMapper, Exa
         examUserMapper.updateById(examUser);
 
         //刷新排名缓存
-        Exam exam = examMapper.selectById(examId);
-        rankService.refreshExamRank(exam.getSubjectId(), examUser);
+        ExamUser examUserToRank = examUserMapper.selectById(examUser.getId());
+        rankService.refreshExamRank(exam.getSubjectId(), examUserToRank);
         return totalScore;
     }
 
