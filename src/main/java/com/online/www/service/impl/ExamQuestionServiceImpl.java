@@ -83,7 +83,8 @@ public class ExamQuestionServiceImpl extends ServiceImpl<ExamQuestionMapper, Exa
 
         //刷新排名缓存
         Exam exam = examMapper.selectById(examId);
-        rankService.refreshExamRank(exam.getSubjectId(), examUser);
+        ExamUser examUserToRank = examUserMapper.selectById(examUser.getId());
+        rankService.refreshExamRank(exam.getSubjectId(), examUserToRank);
         return totalScore;
     }
 
