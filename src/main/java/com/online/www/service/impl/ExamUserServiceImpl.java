@@ -6,7 +6,7 @@ import com.online.www.mapper.ExamUserMapper;
 import com.online.www.mapper.SubjectMapper;
 import com.online.www.pojo.po.Exam;
 import com.online.www.pojo.po.ExamUser;
-import com.online.www.pojo.vo.AnalysisVo;
+import com.online.www.pojo.vo.ExamAnalysisVo;
 import com.online.www.service.ExamUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -36,7 +36,7 @@ public class ExamUserServiceImpl extends ServiceImpl<ExamUserMapper, ExamUser> i
     private SubjectMapper subjectMapper;
 
     @Override
-    public List<AnalysisVo> analysisExam(Integer userId) {
+    public List<ExamAnalysisVo> analysisExam(Integer userId) {
         List<ExamUser> examUserList = examUserMapper.selectByUserId(userId);
         if (CollectionUtils.isEmpty(examUserList)) {
             return Collections.emptyList();
@@ -52,11 +52,11 @@ public class ExamUserServiceImpl extends ServiceImpl<ExamUserMapper, ExamUser> i
                 .stream()
                 .collect(Collectors.groupingBy(Exam::getSubjectId));
 
-        List<AnalysisVo> analysisVoList = new LinkedList<>();
+        List<ExamAnalysisVo> analysisVoList = new LinkedList<>();
         for (Map.Entry<Integer, List<Exam>> entry : examMap.entrySet()) {
-            AnalysisVo analysisVo = new AnalysisVo();
-            analysisVo.setSubjectId(entry.getKey());
-            analysisVo.setSubjectName(subjectMapper.selectById(entry.getKey()).getSubjectName());
+            ExamAnalysisVo examAnalysisVo = new ExamAnalysisVo();
+            examAnalysisVo.setSubjectId(entry.getKey());
+            examAnalysisVo.setSubjectName(subjectMapper.selectById(entry.getKey()).getSubjectName());
 
             List<Exam> examList = entry.getValue();
             int passingCount = 0;
@@ -65,9 +65,11 @@ public class ExamUserServiceImpl extends ServiceImpl<ExamUserMapper, ExamUser> i
                     passingCount++;
                 }
             }
-            analysisVo.setRate((double) passingCount / examList.size());
+            examAnalysisVo.setExamCount(examList.size());
+            examAnalysisVo.setPassingCount(passingCount);
+            examAnalysisVo.setRate((double) passingCount / examList.size());
 
-            analysisVoList.add(analysisVo);
+            analysisVoList.add(examAnalysisVo);
         }
 
         return analysisVoList;
