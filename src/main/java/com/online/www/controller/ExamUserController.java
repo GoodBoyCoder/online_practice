@@ -1,7 +1,7 @@
 package com.online.www.controller;
 
 import com.online.www.annotation.TokenRequired;
-import com.online.www.pojo.vo.AnalysisVo;
+import com.online.www.pojo.vo.ExamAnalysisVo;
 import com.online.www.result.CommonResult;
 import com.online.www.service.ExamUserService;
 import io.swagger.annotations.Api;
@@ -28,7 +28,7 @@ public class ExamUserController extends BaseController {
     @ApiOperation(value = "考试分析", notes = "分析用户的考试情况预测出各科的考试通过率")
     @TokenRequired
     @GetMapping("/analysisExam")
-    public CommonResult<List<AnalysisVo>> analysisExam() {
+    public CommonResult<List<ExamAnalysisVo>> analysisExam() {
         return CommonResult.operateSuccess(examUserService.analysisExam(getUserId()));
     }
 }

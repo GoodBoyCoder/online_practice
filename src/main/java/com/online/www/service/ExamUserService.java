@@ -2,7 +2,7 @@ package com.online.www.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.online.www.pojo.po.ExamUser;
-import com.online.www.pojo.vo.AnalysisVo;
+import com.online.www.pojo.vo.ExamAnalysisVo;
 
 import java.util.List;
 
@@ -22,5 +22,5 @@ public interface ExamUserService extends IService<ExamUser> {
      * @param userId 用户id
      * @return 分析结果集合（各科的通过率）
      */
-    List<AnalysisVo> analysisExam(Integer userId);
+    List<ExamAnalysisVo> analysisExam(Integer userId);
 }
