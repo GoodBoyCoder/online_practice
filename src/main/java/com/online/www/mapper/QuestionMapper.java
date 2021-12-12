@@ -59,4 +59,19 @@ public interface QuestionMapper extends BaseMapper<Question> {
                 .eq(Question::getQuestionType, questionType);
         return selectList(queryWrapper);
     }
+
+    /**
+     * 根据Id查题目
+     * @param questionIds 问题Id列表
+     * @return List<Question>
+     */
+    default List<Question> selectByIds(List<Long> questionIds){
+        QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .select(Question::getId, Question::getQuestion, Question::getQuestionOptions, Question::getPic,
+                        Question::getQuestionType, Question::getMark, Question::getChapter, Question::getSubjectId,
+                        Question::getRemark)
+                .in(Question::getId, questionIds);
+        return selectList(queryWrapper);
+    }
 }
